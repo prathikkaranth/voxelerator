@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'==''">
+    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">10.0</WindowsTargetPlatformVersion>
+    <TargetPlatformVersion>$(WindowsTargetPlatformVersion)</TargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>voxelerator</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="D:\Software\OpenFrameworkSource\OpenFramework\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="D:\Software\OpenFrameworkSource\OpenFramework\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\emscripten;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Debug;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Release;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\license;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ObjectFileName>$(IntDir)\Build\%(Directory)\$(Configuration)\</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);assimp64d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Debug</AdditionalLibraryDirectories>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\emscripten;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Debug;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Release;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\license;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ObjectFileName>$(IntDir)\Build\%(RelativeDir)\$(Configuration)\</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Release</AdditionalLibraryDirectories>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\voxel.cpp" />
+    <ClCompile Include="src\fileParser.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxColorPicker.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxInputField.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxToggle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\voxel.h" />
+    <ClInclude Include="src\fileParser.h" />
+    <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpUtils.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\aabb.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ai_assert.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\anim.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Base64.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\BaseImporter.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Bitmap.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\BlobIOSystem.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ByteSwapper.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\camera.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cexport.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cfileio.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cimport.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ColladaMetaData.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\color4.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\commonMetaData.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\config.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOStream.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\defs.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Exceptional.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Exporter.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\fast_atof.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\GenericProperty.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\GltfMaterial.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Hash.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Importer.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\importerdesc.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOStream.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOSystem.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\light.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\LineSplitter.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\LogAux.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Logger.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\LogStream.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\material.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\MathFunctions.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix3x3.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix4x4.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\mesh.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\metadata.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\NullLogger.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ObjMaterial.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ParsingUtils.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\pbrmaterial.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI\AndroidJNIIOSystem.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI\BundledAssetIOSystem.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\postprocess.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Profiler.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\qnan.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\quaternion.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\RemoveComments.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\scene.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SceneCombiner.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SGSpatialSort.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SmallVector.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SmoothingGroups.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SpatialSort.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\StandardShapes.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\StreamReader.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\StreamWriter.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\StringComparison.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\StringUtils.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Subdivision.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\texture.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\TinyFormatter.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\types.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector2.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector3.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\version.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Vertex.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\XmlParser.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\XMLTools.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxBaseGui.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxButton.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxColorPicker.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxGui.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxGuiGroup.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxGuiUtils.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxInputField.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxLabel.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxPanel.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxSlider.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxSliderGroup.h" />
+    <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxToggle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+      <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="icon.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
