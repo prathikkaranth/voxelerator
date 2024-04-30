@@ -124,6 +124,7 @@
     <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxToggle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\voxel.h" />
     <ClInclude Include="src\fileParser.h" />
     <ClInclude Include="src\ofApp.h" />

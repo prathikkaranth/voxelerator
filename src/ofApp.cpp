@@ -8,20 +8,22 @@ void ofApp::setup() {
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
 
-	boidModel.parseFile("geo/bird-02_blend.obj", vertices, faces);
-	std::cout<< faces.size() << std::endl;
-	for (int i = 0; i < faces.size(); i++) {
-		/*std::cout << vertices[i] << std::endl;*/
-		/*std::cout << "Face: " << i << " " << faces[i] << std::endl;*/
-		
-	}
+	//boidModel.parseFile("geo/bird-02_blend.obj", vertices, faces);
 
-	// Create multiple boxes and add them to the vector
-	voxels.push_back(Voxel(glm::vec3(0, 0, 0), 1)); // Center
-	voxels.push_back(Voxel(glm::vec3 (- 2, 0, 0), 1)); // Left
-	voxels.push_back(Voxel(glm::vec3(2, 0, 0), 1)); // Right
-	voxels.push_back(Voxel(glm::vec3(0, -2, 0), 1)); // Top
-	voxels.push_back(Voxel(glm::vec3(0, 2, 0), 1)); // Bottom
+	//for (int i = 0; i < vertices.size(); i++) {
+	//	/*std::cout << vertices[i] << std::endl;*/
+	//	/*voxels.push_back(Voxel(vertices[i], 0.25));*/
+	//}
+
+	//for (int i = 0; i < faces.size(); i++) {
+	//	/*std::cout << "Face: " << i << " " << faces[i] << std::endl;*/
+	//}
+
+
+	if (!model.loadModel("geo/suzzane.obj")) {
+		cout << "Can't load model" << endl;
+		ofExit();
+	}
 
 
 	// Set up lighting
@@ -36,18 +38,23 @@ void ofApp::setup() {
 	light1.setSpecularColor(ofColor(255.f, 255.f, 255.f));
 	light1.setAmbientColor(ofColor(150, 150, 150));
 
-
+	/*voxels.push_back(Voxel(glm::vec3(6,7,0), 0.25));*/
+	voxels.push_back(Voxel(glm::vec3(0, 4, 0), 0.25));
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+	for (int i = 0; i < voxels.size(); i++) {
+		voxels[i].voxelRay(model.getMesh(0));
+		voxels[i].mPosition.x = 5 * sin(ofGetElapsedTimef());
+	}
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	
 
 	// draw everything in 3D through camera
 	//
@@ -60,12 +67,26 @@ void ofApp::draw(){
 		ofDrawGridPlane();
 		ofPopMatrix();
 
+		// draw model
+		ofPushMatrix();
+		ofEnableLighting();
+		birdMaterial.setDiffuseColor(ofColor::red);
+		model.setScale(0.01, 0.01, 0.01);
+		birdMaterial.begin();
+		ofSetColor(ofColor::red);
+		model.enableMaterials();
+		model.enableColors();
+		model.enableNormals();
+		model.drawFaces();
+		birdMaterial.end();
+		ofDisableLighting();
+		ofPopMatrix();
+
 		// draw voxels
 		
 		for (auto& voxel : voxels) {
 			voxel.draw();
 		}
-		
 		
 
 	cam.end();

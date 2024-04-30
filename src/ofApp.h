@@ -45,7 +45,6 @@ class ofApp : public ofBaseApp{
 
 		std::vector<Voxel> voxels;
 
-		bool bBoidModelLoaded = false;
-		bool bWireFrame = false;
+		ofxAssimpModelLoader model;
 		
 };

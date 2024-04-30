@@ -404,6 +404,9 @@
     <ClInclude Include="src\voxel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ray.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
