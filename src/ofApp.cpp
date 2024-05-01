@@ -8,24 +8,16 @@ void ofApp::setup() {
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
 
-	//boidModel.parseFile("geo/bird-02_blend.obj", vertices, faces);
-
-	//for (int i = 0; i < vertices.size(); i++) {
-	//	/*std::cout << vertices[i] << std::endl;*/
-	//	/*voxels.push_back(Voxel(vertices[i], 0.25));*/
-	//}
-
-	//for (int i = 0; i < faces.size(); i++) {
-	//	/*std::cout << "Face: " << i << " " << faces[i] << std::endl;*/
-	//}
-
-
 	if (!model.loadModel("geo/suzzane.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
 
+	else {
+		modelLoaded = true;
+	}
 
+	model.setScale(0.01, 0.01, 0.01);
 	// Set up lighting
 	//
 	ofSetSmoothLighting(true);
@@ -39,17 +31,39 @@ void ofApp::setup() {
 	light1.setAmbientColor(ofColor(150, 150, 150));
 
 	/*voxels.push_back(Voxel(glm::vec3(6,7,0), 0.25));*/
-	voxels.push_back(Voxel(glm::vec3(0, 4, 0), 0.25));
+	/*voxels.push_back(Voxel(glm::vec3(0, 0, 0), 0.25));*/
+	// spawn voxels in a grid 
+	//
+	if (modelLoaded) {
+		voxelizeMesh();
+	}
+
+}
+
+void ofApp::voxelizeMesh() {
+	int gridSize = 30;
+	float spacing = 0.1;
+	float voxelSize = 0.10;
+	for (int x = -gridSize; x <= gridSize; x++) {
+		for (int y = -gridSize; y <= gridSize; y++) {
+			for (int z = -gridSize; z <= gridSize; z++) {
+				glm::vec3 position(x * spacing, y * spacing, z * spacing);
+				voxels.push_back(Voxel(position, voxelSize));
+			}
+		}
+	}
+	for (int i = 0; i < voxels.size(); i++) {
+		voxels[i].voxelRay(model.getMesh(0), model.getModelMatrix());
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-	for (int i = 0; i < voxels.size(); i++) {
-		voxels[i].voxelRay(model.getMesh(0));
-		voxels[i].mPosition.x = 5 * sin(ofGetElapsedTimef());
-	}
-
+	//for (int i = 0; i < voxels.size(); i++) {
+	//	voxels[i].voxelRay(model.getMesh(0), model.getModelMatrix());
+	//	/*voxels[i].mPosition.y = 5 * sin(ofGetElapsedTimef());*/
+	//}
 }
 
 //--------------------------------------------------------------
@@ -71,13 +85,15 @@ void ofApp::draw(){
 		ofPushMatrix();
 		ofEnableLighting();
 		birdMaterial.setDiffuseColor(ofColor::red);
-		model.setScale(0.01, 0.01, 0.01);
+		
 		birdMaterial.begin();
 		ofSetColor(ofColor::red);
 		model.enableMaterials();
 		model.enableColors();
 		model.enableNormals();
-		model.drawFaces();
+		/*model.drawFaces();*/
+		ofSetColor(ofColor::blue);
+		model.drawWireframe();
 		birdMaterial.end();
 		ofDisableLighting();
 		ofPopMatrix();
@@ -85,6 +101,7 @@ void ofApp::draw(){
 		// draw voxels
 		
 		for (auto& voxel : voxels) {
+			/*voxel.draw();*/
 			voxel.draw();
 		}
 		

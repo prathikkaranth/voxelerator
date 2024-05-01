@@ -30,6 +30,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+		void voxelizeMesh();
 
 		ofEasyCam cam;
 
@@ -37,6 +38,7 @@ class ofApp : public ofBaseApp{
 		//
 		ofLight light1;
 		ofMaterial birdMaterial;
+		bool modelLoaded = false;
 
 		fileParser boidModel;
 

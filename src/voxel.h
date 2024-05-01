@@ -10,11 +10,13 @@ class Voxel {
 	public:
 		Voxel(glm::vec3 pos, float size);
 		void draw();
-		void voxelRay(const ofMesh& mesh);
+		void voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix);
 		bool rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2);
-		bool intersectsMesh(const ofMesh& mesh);
+		int intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix);
 
 		glm::vec3 mPosition;
+
+		bool isVisible = false;
 
 	private:
 		ofBoxPrimitive voxel;
