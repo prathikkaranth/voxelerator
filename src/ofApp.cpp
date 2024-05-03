@@ -18,6 +18,7 @@ void ofApp::setup() {
 	}
 
 	model.setScale(0.01, 0.01, 0.01);
+	/*model.setRotation(0, 180, 1, 0, 0);*/
 	// Set up lighting
 	//
 	ofSetSmoothLighting(true);
@@ -41,9 +42,17 @@ void ofApp::setup() {
 }
 
 void ofApp::voxelerateMesh() {
+
+	// Suzanne Values
 	int gridSize = 30;
 	float spacing = 0.185;
 	float voxelSize = 0.15;
+
+	// Cherry Values
+	/*int gridSize = 50;
+	float spacing = 0.045;
+	float voxelSize = 0.045;*/
+
 	for (int x = -gridSize; x <= gridSize; x++) {
 		for (int y = -gridSize; y <= gridSize; y++) {
 			for (int z = -gridSize; z <= gridSize; z++) {
