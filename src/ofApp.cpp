@@ -35,14 +35,14 @@ void ofApp::setup() {
 	// spawn voxels in a grid 
 	//
 	if (modelLoaded) {
-		voxelizeMesh();
+		voxelerateMesh();
 	}
 
 }
 
-void ofApp::voxelizeMesh() {
+void ofApp::voxelerateMesh() {
 	int gridSize = 30;
-	float spacing = 0.155;
+	float spacing = 0.185;
 	float voxelSize = 0.15;
 	for (int x = -gridSize; x <= gridSize; x++) {
 		for (int y = -gridSize; y <= gridSize; y++) {
@@ -82,28 +82,27 @@ void ofApp::draw(){
 		ofPopMatrix();
 
 		// draw model
-		ofPushMatrix();
-		ofEnableLighting();
-		birdMaterial.setDiffuseColor(ofColor::red);
-		
-		birdMaterial.begin();
-		ofSetColor(ofColor::red);
-		model.enableMaterials();
-		model.enableColors();
-		model.enableNormals();
-		/*model.drawFaces();*/
-		ofSetColor(ofColor::blue);
-		model.drawWireframe();
-		birdMaterial.end();
-		ofDisableLighting();
-		ofPopMatrix();
+		if (drawModel) {
+			ofPushMatrix();
+			ofEnableLighting();
+			birdMaterial.setDiffuseColor(ofColor::red);
+			birdMaterial.begin();
+			model.enableMaterials();
+			model.enableColors();
+			model.enableNormals();
+			model.drawFaces();
+			birdMaterial.end();
+			ofDisableLighting();
+			ofPopMatrix();
+		}
 
 		// draw voxels
 		ofPushMatrix();
 		ofEnableLighting();
-		for (auto& voxel : voxels) {
-			/*voxel.draw();*/
-			voxel.draw();
+		if (voxelerate) {
+			for (auto& voxel : voxels) {
+				voxel.draw();
+			}
 		}
 		ofDisableLighting();
 		ofPopMatrix();
@@ -117,6 +116,16 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	
+	if (key == 'v') {
+		voxelerate = true;
+		drawModel = false;
+	}
+
+	if (key == 'm') {
+		drawModel = true;
+		voxelerate = false;
+	}
 	
 	
 }

@@ -30,7 +30,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		void voxelizeMesh();
+		void voxelerateMesh();
 
 		ofEasyCam cam;
 
@@ -39,6 +39,9 @@ class ofApp : public ofBaseApp{
 		ofLight light1;
 		ofMaterial birdMaterial;
 		bool modelLoaded = false;
+
+		bool drawModel = true;
+		bool voxelerate = false;
 
 		fileParser boidModel;
 
