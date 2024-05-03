@@ -42,8 +42,8 @@ void ofApp::setup() {
 
 void ofApp::voxelizeMesh() {
 	int gridSize = 30;
-	float spacing = 0.1;
-	float voxelSize = 0.10;
+	float spacing = 0.155;
+	float voxelSize = 0.15;
 	for (int x = -gridSize; x <= gridSize; x++) {
 		for (int y = -gridSize; y <= gridSize; y++) {
 			for (int z = -gridSize; z <= gridSize; z++) {
@@ -99,12 +99,14 @@ void ofApp::draw(){
 		ofPopMatrix();
 
 		// draw voxels
-		
+		ofPushMatrix();
+		ofEnableLighting();
 		for (auto& voxel : voxels) {
 			/*voxel.draw();*/
 			voxel.draw();
 		}
-		
+		ofDisableLighting();
+		ofPopMatrix();
 
 	cam.end();
 

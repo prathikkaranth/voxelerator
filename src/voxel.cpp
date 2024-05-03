@@ -1,20 +1,23 @@
 #include "voxel.h"
 #include <glm/gtx/intersect.hpp>
 
+ofBoxPrimitive Voxel::sBoxPrimitive;
+
 Voxel::Voxel(glm::vec3 pos, float size) {
 	mPosition = pos;
 
-	voxel.setPosition(pos);
-	voxel.set(size);
+	sBoxPrimitive.setPosition(pos);
+	sBoxPrimitive.set(size);
 }
 
 void Voxel::draw() {
-	voxel.setPosition(mPosition);
+	sBoxPrimitive.setPosition(mPosition);
 
 	if (isVisible) {
-		voxel.draw();
+		sBoxPrimitive.draw();
 	}
-
+	static constexpr int voxelSize = sizeof(Voxel);
+	
 	/*voxel.draw();*/
 	
 	/*ofSetColor(255, 255, 0);
@@ -25,31 +28,17 @@ void Voxel::draw() {
 
 void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix) {
 
-	// check how many times the ray intersects the mesh
-	//
-	//if (intersectsMesh(mesh, modelMatrix)) {
-	//	/*std::cout << "true" << std::endl;*/
-	//	voxel.setSideColor(3, ofColor(0, 255, 0));
-	//	
-
-	//}
-	//else {
-	//	std::cout << "false" << std::endl;
-	//	ofSetColor(255, 0, 0);
-	//	voxel.setSideColor(3, ofColor(255, 0, 0));
-	//}
-
 	int intersectCount = intersectsMesh(mesh, modelMatrix);
 	
 	if (intersectCount % 2 == 0) {
 		/*std::cout << "outside mesh" << std::endl;*/
-		voxel.setSideColor(3, ofColor(255, 0, 0));
+		/*voxel.setSideColor(3, ofColor(255, 0, 0));*/
 		isVisible = false;
 
 	}
 	else {
 		/*std::cout << "inside mesh" << std::endl;*/
-		voxel.setSideColor(3, ofColor(0, 255, 0));
+		/*voxel.setSideColor(3, ofColor(0, 255, 0));*/
 		isVisible = true;
 	}
 	

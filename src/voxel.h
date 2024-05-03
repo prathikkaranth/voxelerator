@@ -19,5 +19,5 @@ class Voxel {
 		bool isVisible = false;
 
 	private:
-		ofBoxPrimitive voxel;
+		static ofBoxPrimitive sBoxPrimitive;
 };
