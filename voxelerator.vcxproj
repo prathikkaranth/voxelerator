@@ -9,6 +9,10 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'==''">
     <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
@@ -32,8 +36,18 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="D:\Software\OpenFrameworkSource\OpenFramework\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="D:\Software\OpenFrameworkSource\OpenFramework\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
@@ -50,6 +64,11 @@
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
@@ -93,6 +112,31 @@
     <Link>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Release</AdditionalLibraryDirectories>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\emscripten;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Debug;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64\Release;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\libs\assimp\license;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src;D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ObjectFileName>$(IntDir)\Build\%(Directory)\$(Configuration)\</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -76,6 +76,7 @@ bool Voxel::rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::ve
 		return true;
 	}
 	
+	return false;
 }
 
 int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray) {
@@ -95,13 +96,12 @@ int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, floa
 		v2 = glm::vec3(modelMatrix * glm::vec4(v2, 1));
 		 
 		float dist;
-		/*bool hitGLM = glm::intersectRayTriangle(mPosition, glm::vec3(0, -1, 0), 
+		/*bool hitGLM = glm::intersectRayTriangle(ray.origin, ray.direction, 
 			v0, v1, v2, bary, dist);*/
 
-		bool hitPK = rayTriangleIntersection(ray, v0, v1, v2, dist);
+		bool hit = rayTriangleIntersection(ray, v0, v1, v2, dist);
 
-
-		if (hitPK) {
+		if (hit) {
 			intersectionCount++;
 			shortestDist = std::min(dist, shortestDist);
 		}

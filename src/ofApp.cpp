@@ -13,7 +13,7 @@ void ofApp::setup() {
 	gui.setup();
 	gui.add(uiPosition.set("Position", ofVec3f(0, 4, 0), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
 
-	if (!model.loadModel("geo/Bonsai/model.obj")) {
+	if (!model.loadModel("geo/Suzzane/suzzane.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -22,8 +22,7 @@ void ofApp::setup() {
 		modelLoaded = true;
 	}
 
-	model.setScale(0.01, 0.01, 0.01);
-	model.setRotation(0, 5, 1, 0, 1);
+	model.setScale(0.01, -0.01, 0.01);
 
 	glm::vec3 minBound = glm::vec3(std::numeric_limits<float>::max());
 	glm::vec3 maxBound = glm::vec3(std::numeric_limits<float>::min());;
