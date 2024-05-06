@@ -13,7 +13,7 @@ class Voxel {
 		void voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix);
 		bool rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, float &t);
 		int intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray);
-		float shortestDistanceMesh(Ray ray, const ofMesh& mesh, const glm::mat4& modelMatrix);
+		float shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatrix);
 
 		glm::vec3 mPosition;
 

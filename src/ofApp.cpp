@@ -8,7 +8,12 @@ void ofApp::setup() {
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
 
-	if (!model.loadModel("geo/suzzane.obj")) {
+	// GUI
+	//
+	gui.setup();
+	gui.add(uiPosition.set("Position", ofVec3f(0, 4, 0), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
+
+	if (!model.loadModel("geo/Bonsai/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -18,7 +23,32 @@ void ofApp::setup() {
 	}
 
 	model.setScale(0.01, 0.01, 0.01);
-	/*model.setRotation(0, 180, 1, 0, 0);*/
+	model.setRotation(0, 5, 1, 0, 1);
+
+	glm::vec3 minBound = glm::vec3(std::numeric_limits<float>::max());
+	glm::vec3 maxBound = glm::vec3(std::numeric_limits<float>::min());;
+
+	for (int m = 0; m < model.getMeshCount(); m++)
+	{
+		// Setup a bounding box for the model
+		ofMesh mesh = model.getMesh(m);
+
+		const glm::mat4 modelMatrix = model.getModelMatrix();
+		for (int i = 0; i < mesh.getNumVertices(); i++) {
+
+			glm::vec3 v = glm::vec3(modelMatrix * glm::vec4(mesh.getVertex(i), 1.0f));
+			minBound.x = min(minBound.x, v.x);
+			minBound.y = min(minBound.y, v.y);
+			minBound.z = min(minBound.z, v.z);
+			maxBound.x = max(maxBound.x, v.x);
+			maxBound.y = max(maxBound.y, v.y);
+			maxBound.z = max(maxBound.z, v.z);
+		}
+	}
+
+	boundingBox.set(maxBound.x - minBound.x, maxBound.y - minBound.y, maxBound.z - minBound.z);
+	boundingBox.setPosition((minBound + maxBound) / 2);
+	
 	// Set up lighting
 	//
 	ofSetSmoothLighting(true);
@@ -26,7 +56,7 @@ void ofApp::setup() {
 	// setup one point light
 	//
 	light1.enable();
-	light1.setPosition(0, 20, 0);
+	/*light1.setPosition(0, 10, 0);*/
 	light1.setDiffuseColor(ofColor(255.f, 255.f, 255.f));
 	light1.setSpecularColor(ofColor(255.f, 255.f, 255.f));
 	light1.setAmbientColor(ofColor(150, 150, 150));
@@ -44,14 +74,20 @@ void ofApp::setup() {
 void ofApp::voxelerateMesh() {
 
 	// Suzanne Values
-	int gridSize = 30;
+	/*int gridSize = 30;
 	float spacing = 0.185;
-	float voxelSize = 0.15;
+	float voxelSize = 0.15;*/
 
 	// Cherry Values
 	/*int gridSize = 50;
 	float spacing = 0.045;
 	float voxelSize = 0.045;*/
+
+	// Bonsai Values
+	int gridSize = 30;
+	float spacing = 0.15;
+	float voxelSize = 0.15;
+
 
 	for (int x = -gridSize; x <= gridSize; x++) {
 		for (int y = -gridSize; y <= gridSize; y++) {
@@ -62,7 +98,10 @@ void ofApp::voxelerateMesh() {
 		}
 	}
 	for (int i = 0; i < voxels.size(); i++) {
-		voxels[i].voxelRay(model.getMesh(0), model.getModelMatrix());
+		for (int m = 0; m < model.getMeshCount(); m++)
+		{
+			voxels[i].voxelRay(model.getMesh(m), model.getModelMatrix());
+		}
 	}
 }
 
@@ -73,6 +112,8 @@ void ofApp::update(){
 	//	voxels[i].voxelRay(model.getMesh(0), model.getModelMatrix());
 	//	/*voxels[i].mPosition.y = 5 * sin(ofGetElapsedTimef());*/
 	//}
+
+	light1.setPosition(uiPosition->x, uiPosition->y, uiPosition->z);
 }
 
 //--------------------------------------------------------------
@@ -83,12 +124,19 @@ void ofApp::draw(){
 	//
 	cam.begin();
 	
+		ofEnableDepthTest();
 		// draw grid
 		ofPushMatrix();
 		ofSetColor(ofColor::dimGray);
 		ofRotateDeg(90);
 		ofDrawGridPlane();
 		ofPopMatrix();
+
+		// draw light
+		ofPushMatrix();
+		ofDrawSphere(light1.getPosition(), 0.1);
+		ofPopMatrix();
+
 
 		// draw model
 		if (drawModel) {
@@ -105,6 +153,13 @@ void ofApp::draw(){
 			ofPopMatrix();
 		}
 
+		// draw bounding box
+		ofPushMatrix();
+		ofSetColor(ofColor::white);
+		ofNoFill();
+		boundingBox.drawWireframe();
+		ofPopMatrix();
+
 		// draw voxels
 		ofPushMatrix();
 		ofEnableLighting();
@@ -116,10 +171,13 @@ void ofApp::draw(){
 		ofDisableLighting();
 		ofPopMatrix();
 
+		ofDisableDepthTest();
+
 	cam.end();
 
 	// draw UI
 	//
+	gui.draw();
 
 }
 

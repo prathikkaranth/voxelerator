@@ -5,6 +5,7 @@
 #include "fileParser.h"
 #include "ofMesh.h"
 #include "voxel.h"
+#include "ofxGui.h"
 
 // special header file for all glm intersection functions
 //
@@ -34,6 +35,10 @@ class ofApp : public ofBaseApp{
 
 		ofEasyCam cam;
 
+		// GUI
+		ofxPanel gui;
+		ofParameter<ofVec3f> uiPosition;
+
 		// Lights
 		//
 		ofLight light1;
@@ -49,6 +54,10 @@ class ofApp : public ofBaseApp{
 		std::vector<glm::uvec3> faces;
 
 		std::vector<Voxel> voxels;
+
+		// Bounding box
+		//
+		ofBoxPrimitive boundingBox;
 
 		ofxAssimpModelLoader model;
 		
