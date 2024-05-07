@@ -62,6 +62,7 @@ class ofApp : public ofBaseApp{
 		std::vector<Voxel> voxels;
 
 		ofxAssimpModelLoader model;
+		ofxAssimpModelLoader boxModel;
 
 		ofBoxPrimitive boundingBox;
 

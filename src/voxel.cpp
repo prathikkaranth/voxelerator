@@ -10,11 +10,14 @@ Voxel::Voxel(glm::vec3 pos, float size) {
 	sBoxPrimitive.set(size);
 }
 
-void Voxel::draw() {
+void Voxel::draw(ofxAssimpModelLoader &boxModel) {
 	sBoxPrimitive.setPosition(mPosition);
+	boxModel.setPosition(mPosition.x, mPosition.y, mPosition.z);
 
 	if (isVisible) {
-		sBoxPrimitive.draw();
+		/*sBoxPrimitive.draw();*/
+		boxModel.drawFaces();
+
 	}
 	static constexpr int voxelSize = sizeof(Voxel);
 	
@@ -36,42 +39,14 @@ void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix, const std
 	else {
 	}
 	
-}
-
-bool Voxel::rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, float &t) {
-
-	glm::vec3 edge1 = v1 - v0;
-	glm::vec3 edge2 = v2 - v0;
-	glm::vec3 h = glm::cross(ray.direction, edge2);
-	float det = glm::dot(edge1, h);
-
-	if (det > -0.00001 && det < 0.00001) return false;
-
-	float invDet = 1.0 / det;
-	glm::vec3 s = ray.origin - v0;
-	float u = invDet * glm::dot(s, h);
-
-	if (u < 0 || u > 1) return false;
-
-	glm::vec3 q = glm::cross(s, edge1);
-	float v = invDet * glm::dot(ray.direction, q);
-
-	if (v < 0 || u + v > 1) return false;
-
-	t = invDet * glm::dot(edge2, q);
-
-	if (t > 0.00001) {
-		return true;
-	}
+	/*isVisible = true;*/
 	
-	return false;
 }
 
 int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH) {
 
 	glm::vec2 bary;
 	int intersectionCount = 0;
-	float shortestDist = std::numeric_limits <float>::max();
 
 	//for (unsigned int i= 0; i < mesh.getNumIndices(); i += 3) {
 	//	glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
@@ -128,6 +103,36 @@ float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatr
 	}
 	return shortestDist;
 
+}
+
+
+bool Voxel::rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, float& t) {
+
+	glm::vec3 edge1 = v1 - v0;
+	glm::vec3 edge2 = v2 - v0;
+	glm::vec3 h = glm::cross(ray.direction, edge2);
+	float det = glm::dot(edge1, h);
+
+	if (det > -0.00001 && det < 0.00001) return false;
+
+	float invDet = 1.0 / det;
+	glm::vec3 s = ray.origin - v0;
+	float u = invDet * glm::dot(s, h);
+
+	if (u < 0 || u > 1) return false;
+
+	glm::vec3 q = glm::cross(s, edge1);
+	float v = invDet * glm::dot(ray.direction, q);
+
+	if (v < 0 || u + v > 1) return false;
+
+	t = invDet * glm::dot(edge2, q);
+
+	if (t > 0.00001) {
+		return true;
+	}
+
+	return false;
 }
 
 

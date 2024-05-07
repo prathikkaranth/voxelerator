@@ -12,8 +12,9 @@ void ofApp::setup() {
 	// GUI
 	//
 	gui.setup();
-	gui.add(uiPosition.set("Position", ofVec3f(0, 4, 0), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
+	gui.add(uiPosition.set("Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
 
+	// Main model
 	if (!model.loadModel("geo/Suzzane/suzzane.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
@@ -23,7 +24,15 @@ void ofApp::setup() {
 		modelLoaded = true;
 	}
 
+	// VoxelBox
+	//
+	if (!boxModel.loadModel("geo/RoundCube/RoundCube.obj")) {
+		cout << "Can't load model" << endl;
+		ofExit();
+	}
+
 	model.setScale(0.01, 0.01, 0.01);
+	boxModel.setScale(0.00035, 0.00035, 0.00035);
 	
 	// Set up lighting
 	//
@@ -93,13 +102,14 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 	float voxelSize = 0.045;*/
 
 	// Bonsai Values
-	int gridSize = 1;
+	int gridSize = 20;
+	float spacing = 0.175;
 	float voxelSize = 0.15;
 
-	for (int x = bbox.min().x; x <= bbox.max().x; x+=gridSize) {
-		for (int y = bbox.min().y; y <= bbox.max().y; y+=gridSize) {
-			for (int z = bbox.min().z; z <= bbox.max().z; z+=gridSize) {
-				glm::vec3 position(x, y, z);
+	for (int x = -gridSize; x <= gridSize; x++) {
+		for (int y = -gridSize; y <= gridSize; y++) {
+			for (int z = -gridSize; z <= gridSize; z++) {
+				glm::vec3 position(x * spacing, y * spacing, z * spacing);
 				voxels.push_back(Voxel(position, voxelSize));
 			}
 		}
@@ -171,7 +181,7 @@ void ofApp::draw(){
 		ofEnableLighting();
 		if (voxelerate) {
 			for (auto& voxel : voxels) {
-				voxel.draw();
+				voxel.draw(boxModel);
 			}
 		}
 		ofDisableLighting();
