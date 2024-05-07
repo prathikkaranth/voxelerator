@@ -1,22 +1,6 @@
 #include "ofApp.h"
 #include "ofxAssimpModelLoader.h"
 
-std::shared_ptr<hittable> ofApp::scene() {
-	hittable_list objects;
-	for (int m = 0; m < model.getMeshCount(); m++) {
-		ofMesh mesh = model.getMesh(m);
-		for (int i = 0; i < mesh.getNumIndices(); i += 3) {
-			glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
-			glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
-			glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
-			objects.add(
-				std::make_shared<Triangle>(v0, v1, v2)
-			);
-		}
-	}
-
-	return make_shared<bvh_node>(objects, 0.0, 1.0);
-}
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -39,7 +23,7 @@ void ofApp::setup() {
 		modelLoaded = true;
 	}
 
-	model.setScale(0.01, -0.01, 0.01);
+	model.setScale(0.01, 0.01, 0.01);
 	
 	// Set up lighting
 	//
@@ -53,21 +37,50 @@ void ofApp::setup() {
 	light1.setSpecularColor(ofColor(255.f, 255.f, 255.f));
 	light1.setAmbientColor(ofColor(150, 150, 150));
 
-	/*voxels.push_back(Voxel(glm::vec3(6,7,0), 0.25));*/
-	/*voxels.push_back(Voxel(glm::vec3(0, 0, 0), 0.25));*/
 	// spawn voxels in a grid 
 	//
 	if (modelLoaded) {
-		voxelerateMesh(scene());
+		const std::shared_ptr<hittable> bvh = scene();
+		aabb bbox;
+		bvh->bounding_box(0.0, 1.0, bbox);
+
+		// draw bounding box
+		//
+		boundingBox.set(bbox.max().x - bbox.min().x, bbox.max().y - bbox.min().y, bbox.max().z - bbox.min().z);
+		boundingBox.setPosition((bbox.max().x + bbox.min().x) / 2, (bbox.max().y + bbox.min().y) / 2, (bbox.max().z + bbox.min().z) / 2);
+		
+		voxelerateMesh(bvh, bbox);	
 	}
 
 }
 
+std::shared_ptr<hittable> ofApp::scene() {
+	hittable_list objects;
+	for (int m = 0; m < model.getMeshCount(); m++) {
+		ofMesh mesh = model.getMesh(m);
+		for (int i = 0; i < mesh.getNumIndices(); i += 3) {
+			glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
+			glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
+			glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
+
+			// transform vertices to world space
+			v0 = glm::vec3(model.getModelMatrix() * glm::vec4(v0, 1));
+			v1 = glm::vec3(model.getModelMatrix() * glm::vec4(v1, 1));
+			v2 = glm::vec3(model.getModelMatrix() * glm::vec4(v2, 1));
+
+			objects.add(
+				std::make_shared<Triangle>(v0, v1, v2)
+			);
+		}
+	}
+
+	return make_shared<bvh_node>(objects, 0.0, 1.0);
+}
+	
 
 
 
-
-void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH) {
+void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 
 	// Suzanne Values
 	/*int gridSize = 30;
@@ -80,15 +93,13 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH) {
 	float voxelSize = 0.045;*/
 
 	// Bonsai Values
-	int gridSize = 30;
-	float spacing = 0.15;
+	int gridSize = 1;
 	float voxelSize = 0.15;
 
-
-	for (int x = -gridSize; x <= gridSize; x++) {
-		for (int y = -gridSize; y <= gridSize; y++) {
-			for (int z = -gridSize; z <= gridSize; z++) {
-				glm::vec3 position(x * spacing, y * spacing, z * spacing);
+	for (int x = bbox.min().x; x <= bbox.max().x; x+=gridSize) {
+		for (int y = bbox.min().y; y <= bbox.max().y; y+=gridSize) {
+			for (int z = bbox.min().z; z <= bbox.max().z; z+=gridSize) {
+				glm::vec3 position(x, y, z);
 				voxels.push_back(Voxel(position, voxelSize));
 			}
 		}
@@ -133,6 +144,12 @@ void ofApp::draw(){
 		ofDrawSphere(light1.getPosition(), 0.1);
 		ofPopMatrix();
 
+		// draw bounding box
+		ofPushMatrix();
+		ofSetColor(ofColor::white);
+		ofNoFill();
+		boundingBox.drawWireframe();
+		ofPopMatrix();
 
 		// draw model
 		if (drawModel) {

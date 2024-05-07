@@ -36,7 +36,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		void voxelerateMesh(const std::shared_ptr<hittable>& hitBVH);
+		void voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox);
 		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;
@@ -62,6 +62,8 @@ class ofApp : public ofBaseApp{
 		std::vector<Voxel> voxels;
 
 		ofxAssimpModelLoader model;
+
+		ofBoxPrimitive boundingBox;
 
 
 };
