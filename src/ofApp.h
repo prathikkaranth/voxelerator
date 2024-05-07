@@ -37,6 +37,9 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		void voxelerateMesh();
+		void generateTriFromMesh();
+		void ofApp::generateSceneFromTri();
+		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;
 
@@ -61,5 +64,13 @@ class ofApp : public ofBaseApp{
 		std::vector<Voxel> voxels;
 
 		ofxAssimpModelLoader model;
+
+		// Triangles mesh
+		//
+		std::vector<Triangle> trianglesMesh;
+
+		// Scene
+		//
+		hittable_list objects;
 
 };

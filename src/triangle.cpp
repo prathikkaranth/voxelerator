@@ -30,14 +30,6 @@ bool Triangle::hit(const Ray& r, double t_min, double t_max, hit_record& rec) co
 	return false;
 }
 
-void Triangle::setVertFromMesh(const ofMesh& mesh, int index) {
-	
-	mVert0 = mesh.getVertex(mesh.getIndex(index));
-	mVert1 = mesh.getVertex(mesh.getIndex(index + 1));
-	mVert2 = mesh.getVertex(mesh.getIndex(index + 2));
-
-}
-
 bool Triangle::bounding_box(double time0, double time1, aabb& output_box) const {
 	
 	double xmin = fmin(mVert0.x, mVert1.x);
