@@ -6,6 +6,11 @@
 #include "ofMesh.h"
 #include "voxel.h"
 #include "ofxGui.h"
+#include "ray.h"
+#include "aabb.h"
+#include "bvh.h"
+#include "hittable.h"
+#include "triangle.h"
 
 // special header file for all glm intersection functions
 //
@@ -55,10 +60,6 @@ class ofApp : public ofBaseApp{
 
 		std::vector<Voxel> voxels;
 
-		// Bounding box
-		//
-		ofBoxPrimitive boundingBox;
-
 		ofxAssimpModelLoader model;
-		
+
 };

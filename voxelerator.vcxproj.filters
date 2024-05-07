@@ -55,6 +55,18 @@
     <ClCompile Include="src\voxel.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\triangle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aabb.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bvh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hittable_list.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -405,6 +417,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triangle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aabb.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bvh.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hittable.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hittable_list.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,30 +23,6 @@ void ofApp::setup() {
 	}
 
 	model.setScale(0.01, -0.01, 0.01);
-
-	glm::vec3 minBound = glm::vec3(std::numeric_limits<float>::max());
-	glm::vec3 maxBound = glm::vec3(std::numeric_limits<float>::min());;
-
-	for (int m = 0; m < model.getMeshCount(); m++)
-	{
-		// Setup a bounding box for the model
-		ofMesh mesh = model.getMesh(m);
-
-		const glm::mat4 modelMatrix = model.getModelMatrix();
-		for (int i = 0; i < mesh.getNumVertices(); i++) {
-
-			glm::vec3 v = glm::vec3(modelMatrix * glm::vec4(mesh.getVertex(i), 1.0f));
-			minBound.x = min(minBound.x, v.x);
-			minBound.y = min(minBound.y, v.y);
-			minBound.z = min(minBound.z, v.z);
-			maxBound.x = max(maxBound.x, v.x);
-			maxBound.y = max(maxBound.y, v.y);
-			maxBound.z = max(maxBound.z, v.z);
-		}
-	}
-
-	boundingBox.set(maxBound.x - minBound.x, maxBound.y - minBound.y, maxBound.z - minBound.z);
-	boundingBox.setPosition((minBound + maxBound) / 2);
 	
 	// Set up lighting
 	//
@@ -151,13 +127,6 @@ void ofApp::draw(){
 			ofDisableLighting();
 			ofPopMatrix();
 		}
-
-		// draw bounding box
-		ofPushMatrix();
-		ofSetColor(ofColor::white);
-		ofNoFill();
-		boundingBox.drawWireframe();
-		ofPopMatrix();
 
 		// draw voxels
 		ofPushMatrix();
