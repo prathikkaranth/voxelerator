@@ -26,27 +26,15 @@ void Voxel::draw() {
 
 }
 
-void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix) {
+void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 
-	/*float dist;
-	int intersectCount = intersectsMesh(mesh, modelMatrix, dist);
-	
-	if (intersectCount % 2 == 0) {
-		isVisible = false;
+	float shortestDist = shortestDistanceMesh(mesh, modelMatrix, hitBVH);
 
-	}
-	else if(intersectCount % 2 != 0 && dist < 1.05) {
-		isVisible = true;
-	}*/
-	float shortestDist = shortestDistanceMesh(mesh, modelMatrix);
-
-	if (shortestDist < 0.3) {
+	if (shortestDist < 0.6) {
 		isVisible = true;
 	}
 	else {
-		/*isVisible = false;*/
 	}
-	
 	
 }
 
@@ -79,39 +67,46 @@ bool Voxel::rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::ve
 	return false;
 }
 
-int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray) {
+int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH) {
 
 	glm::vec2 bary;
 	int intersectionCount = 0;
 	float shortestDist = std::numeric_limits <float>::max();
 
-	for (unsigned int i= 0; i < mesh.getNumIndices(); i += 3) {
-		glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
-		glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
-		glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
+	//for (unsigned int i= 0; i < mesh.getNumIndices(); i += 3) {
+	//	glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
+	//	glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
+	//	glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
 
-		// transform vertices to world space
-		v0 = glm::vec3(modelMatrix * glm::vec4(v0, 1));
-		v1 = glm::vec3(modelMatrix * glm::vec4(v1, 1));
-		v2 = glm::vec3(modelMatrix * glm::vec4(v2, 1));
-		 
-		float dist;
-		/*bool hitGLM = glm::intersectRayTriangle(ray.origin, ray.direction, 
-			v0, v1, v2, bary, dist);*/
+	//	// transform vertices to world space
+	//	v0 = glm::vec3(modelMatrix * glm::vec4(v0, 1));
+	//	v1 = glm::vec3(modelMatrix * glm::vec4(v1, 1));
+	//	v2 = glm::vec3(modelMatrix * glm::vec4(v2, 1));
+	//	 
+	//	float dist;
 
-		bool hit = rayTriangleIntersection(ray, v0, v1, v2, dist);
+	//	bool hit = rayTriangleIntersection(ray, v0, v1, v2, dist);
 
-		if (hit) {
-			intersectionCount++;
-			shortestDist = std::min(dist, shortestDist);
-		}
-	}	
+	//	if (hit) {
+	//		intersectionCount++;
+	//		shortestDist = std::min(dist, shortestDist);
+	//	}
+	//}	
 
-	distOut = shortestDist;
+
+
+	hit_record rec;
+	bool hitBV = hitBVH->hit(ray, 0.0001, std::numeric_limits<float>::max(), rec);
+
+	if (hitBV) {
+		intersectionCount++;
+	}
+
+	distOut = rec.t;
 	return intersectionCount;
 }
 
-float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatrix) {
+float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 	
 	static constexpr std::array<glm::vec3, 6> directions = {
 		glm::vec3(1, 0, 0),
@@ -126,7 +121,7 @@ float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatr
 
 	for (const auto& direction : directions) {
 		float dist;
-		int intersectionCount = intersectsMesh(mesh, modelMatrix, dist, Ray(mPosition, direction));
+		int intersectionCount = intersectsMesh(mesh, modelMatrix, dist, Ray(mPosition, direction), hitBVH);
 		if (intersectionCount % 2 != 0) {
 			shortestDist = std::min(dist, shortestDist);
 		}

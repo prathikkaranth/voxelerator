@@ -36,9 +36,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		void voxelerateMesh();
-		void generateTriFromMesh();
-		void ofApp::generateSceneFromTri();
+		void voxelerateMesh(const std::shared_ptr<hittable>& hitBVH);
 		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;
@@ -65,12 +63,5 @@ class ofApp : public ofBaseApp{
 
 		ofxAssimpModelLoader model;
 
-		// Triangles mesh
-		//
-		std::vector<Triangle> trianglesMesh;
-
-		// Scene
-		//
-		hittable_list objects;
 
 };

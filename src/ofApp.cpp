@@ -1,6 +1,23 @@
 #include "ofApp.h"
 #include "ofxAssimpModelLoader.h"
 
+std::shared_ptr<hittable> ofApp::scene() {
+	hittable_list objects;
+	for (int m = 0; m < model.getMeshCount(); m++) {
+		ofMesh mesh = model.getMesh(m);
+		for (int i = 0; i < mesh.getNumIndices(); i += 3) {
+			glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
+			glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
+			glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
+			objects.add(
+				std::make_shared<Triangle>(v0, v1, v2)
+			);
+		}
+	}
+
+	return make_shared<bvh_node>(objects, 0.0, 1.0);
+}
+
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetBackgroundColor(ofColor::darkGrey);
@@ -41,34 +58,16 @@ void ofApp::setup() {
 	// spawn voxels in a grid 
 	//
 	if (modelLoaded) {
-		voxelerateMesh();
+		voxelerateMesh(scene());
 	}
 
 }
 
-void ofApp::generateTriFromMesh() {
-	for (int m = 0; m < model.getMeshCount(); m++) {
-		ofMesh mesh = model.getMesh(m);
-		for (int i = 0; i < mesh.getNumIndices(); i += 3) {
-			glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
-			glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
-			glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
-			trianglesMesh.push_back(Triangle(v0, v1, v2));		
-		}
-	}
-}
-
-std::shared_ptr<hittable> ofApp::scene() {
-
-	for (int i = 0; i < trianglesMesh.size(); i++) {
-		objects.add(make_shared<Triangle>(trianglesMesh[i]));
-	}
-	return make_shared<bvh_node>(objects, 0.0, 1.0);
-}
 
 
 
-void ofApp::voxelerateMesh() {
+
+void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH) {
 
 	// Suzanne Values
 	/*int gridSize = 30;
@@ -97,7 +96,7 @@ void ofApp::voxelerateMesh() {
 	for (int i = 0; i < voxels.size(); i++) {
 		for (int m = 0; m < model.getMeshCount(); m++)
 		{
-			voxels[i].voxelRay(model.getMesh(m), model.getModelMatrix());
+			voxels[i].voxelRay(model.getMesh(m), model.getModelMatrix(), hitBVH);
 		}
 	}
 }
