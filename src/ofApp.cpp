@@ -19,7 +19,7 @@ void ofApp::setup() {
 	boxModelType.add("LegoBlock");
 
 	// Main model
-	if (!model.loadModel("geo/Suzzane/suzzane.obj")) {
+	if (!model.loadModel("geo/Bonsai/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -76,6 +76,13 @@ void ofApp::setup() {
 
 }
 
+void ofApp::parallelVoxelRay(const std::shared_ptr<hittable>& bvh, aabb bbox, int start, int end) {
+	for (int i = start; i < end; ++i) {	
+		voxels[i].voxelRay(model.getModelMatrix(), bvh);	
+	}
+
+}
+
 std::shared_ptr<hittable> ofApp::scene() {
 	hittable_list objects;
 	for (int m = 0; m < model.getMeshCount(); m++) {
@@ -102,7 +109,7 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 
 
-void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
+void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 
 	const int gridSize = 37;
 
@@ -129,12 +136,31 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 			}
 		}
 	}
-	for (int i = 0; i < voxels.size(); i++) {
+
+	const auto numThreads = 16;
+	const auto numVoxelsPerThread = voxels.size() / numThreads;
+
+	std::vector<std::thread> threads;
+
+	// Create threads
+	for (int tid = 0; tid < numThreads; tid++) {
+		const auto start = tid * numVoxelsPerThread;
+		const auto end = tid == numThreads - 1 ? voxels.size() : start + numVoxelsPerThread;
+		std::thread t(&ofApp::parallelVoxelRay, this, bvh, bbox, start, end);
+		threads.push_back(std::move(t));
+	}
+
+	// Join threads
+	for (auto& t : threads) {
+		t.join();
+	}
+
+	/*for (int i = 0; i < voxels.size(); i++) {
 		for (int m = 0; m < model.getMeshCount(); m++)
 		{
 			voxels[i].voxelRay(model.getMesh(m), model.getModelMatrix(), hitBVH);
 		}
-	}
+	}*/
 }
 
 //--------------------------------------------------------------

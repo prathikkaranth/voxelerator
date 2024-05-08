@@ -1,5 +1,9 @@
 #pragma once
 
+#include<thread>
+#include<chrono>
+#include<atomic>
+
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
 
@@ -38,7 +42,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		void voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox);
-		void onModelChange();
+		void parallelVoxelRay(const std::shared_ptr<hittable>& bvh, aabb bbox, int start, int end);
 		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;

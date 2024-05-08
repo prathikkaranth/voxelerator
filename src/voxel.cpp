@@ -29,9 +29,9 @@ void Voxel::draw(ofxAssimpModelLoader &boxModel) {
 
 }
 
-void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
+void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 
-	float shortestDist = shortestDistanceMesh(mesh, modelMatrix, hitBVH);
+	float shortestDist = shortestDistanceMesh(modelMatrix, hitBVH);
 
 	if (shortestDist < 0.065) {
 		isVisible = true;
@@ -43,7 +43,7 @@ void Voxel::voxelRay(const ofMesh& mesh, const glm::mat4& modelMatrix, const std
 	
 }
 
-int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH) {
+int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH) {
 
 	glm::vec2 bary;
 	int intersectionCount = 0;
@@ -81,7 +81,7 @@ int Voxel::intersectsMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, floa
 	return intersectionCount;
 }
 
-float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
+float Voxel::shortestDistanceMesh(const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 	
 	static constexpr std::array<glm::vec3, 6> directions = {
 		glm::vec3(1, 0, 0),
@@ -96,7 +96,7 @@ float Voxel::shortestDistanceMesh(const ofMesh& mesh, const glm::mat4& modelMatr
 
 	for (const auto& direction : directions) {
 		float dist;
-		int intersectionCount = intersectsMesh(mesh, modelMatrix, dist, Ray(mPosition, direction), hitBVH);
+		int intersectionCount = intersectsMesh(modelMatrix, dist, Ray(mPosition, direction), hitBVH);
 		if (intersectionCount % 2 != 0) {
 			shortestDist = std::min(dist, shortestDist);
 		}
