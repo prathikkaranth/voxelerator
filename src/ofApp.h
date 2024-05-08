@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
-#include "fileParser.h"
+
 #include "ofMesh.h"
 #include "voxel.h"
 #include "ofxGui.h"
@@ -61,8 +61,6 @@ class ofApp : public ofBaseApp{
 
 		bool roundBox = false;
 		bool legoBlock = false;
-
-		fileParser boidModel;
 
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::uvec3> faces;
