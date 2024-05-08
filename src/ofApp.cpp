@@ -32,7 +32,7 @@ void ofApp::setup() {
 	}
 
 	model.setScale(0.01, 0.01, 0.01);
-	boxModel.setScale(0.00035, 0.00035, 0.00035);
+	boxModel.setScale(0.0002, 0.0002, 0.0002);
 	
 	// Set up lighting
 	//
@@ -91,26 +91,26 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 
-	// Suzanne Values
-	/*int gridSize = 30;
-	float spacing = 0.185;
-	float voxelSize = 0.15;*/
+	const int gridSize = 45;
+	float boxPrimSize = 0.15;
 
-	// Cherry Values
-	/*int gridSize = 50;
-	float spacing = 0.045;
-	float voxelSize = 0.045;*/
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize; y++) {
+			for (int z = 0; z < gridSize; z++) {
+				// gridx -> 0 to gridSize - 1, worldX -> bbox.min().x to bbox.max().x 
+				const float voxelSizeX = (bbox.max().x - bbox.min().x) / gridSize;
+				const float voxelSizeY = (bbox.max().y - bbox.min().y) / gridSize;
+				const float voxelSizeZ = (bbox.max().z - bbox.min().z) / gridSize;
 
-	// Bonsai Values
-	int gridSize = 20;
-	float spacing = 0.175;
-	float voxelSize = 0.15;
+				// gridx == 0 -> worldX = bbox.min().x, gridx == 1 --> worldX = bbox.min().x + voxelSizeX
+				const float worldX = bbox.min().x + x * voxelSizeX;
+				const float worldY = bbox.min().y + y * voxelSizeY;
+				const float worldZ = bbox.min().z + z * voxelSizeZ;
 
-	for (int x = -gridSize; x <= gridSize; x++) {
-		for (int y = -gridSize; y <= gridSize; y++) {
-			for (int z = -gridSize; z <= gridSize; z++) {
-				glm::vec3 position(x * spacing, y * spacing, z * spacing);
-				voxels.push_back(Voxel(position, voxelSize));
+				float offset = 0.50;
+
+				glm::vec3 position(worldX + offset * voxelSizeX, worldY + offset * voxelSizeY, worldZ + offset * voxelSizeZ);
+				voxels.push_back(Voxel(position, boxPrimSize));
 			}
 		}
 	}
