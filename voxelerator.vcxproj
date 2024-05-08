@@ -151,9 +151,10 @@
     <ClCompile Include="src\aabb.cpp" />
     <ClCompile Include="src\bvh.cpp" />
     <ClCompile Include="src\hittable_list.cpp" />
+    <ClCompile Include="src\ofxDropdown.cpp" />
+    <ClCompile Include="src\ofxDropdownOption.cpp" />
     <ClCompile Include="src\triangle.cpp" />
     <ClCompile Include="src\voxel.cpp" />
-    <ClCompile Include="src\fileParser.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
@@ -176,10 +177,11 @@
     <ClInclude Include="src\bvh.h" />
     <ClInclude Include="src\hittable.h" />
     <ClInclude Include="src\hittable_list.h" />
+    <ClInclude Include="src\ofxDropdown.h" />
+    <ClInclude Include="src\ofxDropdownOption.hpp" />
     <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\voxel.h" />
-    <ClInclude Include="src\fileParser.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />
     <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h" />

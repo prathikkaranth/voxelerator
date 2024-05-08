@@ -14,6 +14,10 @@ void ofApp::setup() {
 	gui.setup();
 	gui.add(uiPosition.set("Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
 
+	gui.add(&boxModelType);
+	boxModelType.add("RoundBox");
+	boxModelType.add("LegoBlock");
+
 	// Main model
 	if (!model.loadModel("geo/Suzzane/suzzane.obj")) {
 		cout << "Can't load model" << endl;
@@ -26,13 +30,22 @@ void ofApp::setup() {
 
 	// VoxelBox
 	//
-	if (!boxModel.loadModel("geo/RoundCube/RoundCube.obj")) {
+	if (!roundBoxModel.loadModel("geo/RoundCube/RoundCube.obj")) {
+		cout << "Can't load model" << endl;
+		ofExit();
+	}
+
+	if (!legoBlockModel.loadModel("geo/LEGO/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
 
 	model.setScale(0.01, 0.01, 0.01);
-	boxModel.setScale(0.0002, 0.0002, 0.0002);
+
+	roundBoxModel.setRotation(0, 180, 1, 0, 0);
+	roundBoxModel.setScale(0.0002, 0.0002, 0.0002);
+	legoBlockModel.setRotation(0, 180, 1, 0, 0);
+	legoBlockModel.setScale(0.0002, 0.0002, 0.0002);
 	
 	// Set up lighting
 	//
@@ -91,16 +104,18 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 
-	const int gridSize = 45;
-	float boxPrimSize = 0.15;
+	const int gridSize = 37;
+
+	const float voxelSizeX = (bbox.max().x - bbox.min().x) / gridSize;
+	const float voxelSizeY = (bbox.max().y - bbox.min().y) / gridSize;
+	const float voxelSizeZ = (bbox.max().z - bbox.min().z) / gridSize;
+	const float boxPrimSize = std::min(std::min(voxelSizeX, voxelSizeY), voxelSizeZ) / 2.0f;
 
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			for (int z = 0; z < gridSize; z++) {
 				// gridx -> 0 to gridSize - 1, worldX -> bbox.min().x to bbox.max().x 
-				const float voxelSizeX = (bbox.max().x - bbox.min().x) / gridSize;
-				const float voxelSizeY = (bbox.max().y - bbox.min().y) / gridSize;
-				const float voxelSizeZ = (bbox.max().z - bbox.min().z) / gridSize;
+
 
 				// gridx == 0 -> worldX = bbox.min().x, gridx == 1 --> worldX = bbox.min().x + voxelSizeX
 				const float worldX = bbox.min().x + x * voxelSizeX;
@@ -124,11 +139,6 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox) {
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
-	//for (int i = 0; i < voxels.size(); i++) {
-	//	voxels[i].voxelRay(model.getMesh(0), model.getModelMatrix());
-	//	/*voxels[i].mPosition.y = 5 * sin(ofGetElapsedTimef());*/
-	//}
 
 	light1.setPosition(uiPosition->x, uiPosition->y, uiPosition->z);
 }
@@ -177,15 +187,21 @@ void ofApp::draw(){
 		}
 
 		// draw voxels
-		ofPushMatrix();
-		ofEnableLighting();
 		if (voxelerate) {
+			ofPushMatrix();
+			ofEnableLighting();
 			for (auto& voxel : voxels) {
-				voxel.draw(boxModel);
+
+				if(boxModelType.selectedValue.get() == "RoundBox")
+					voxel.draw(roundBoxModel);
+				else if (boxModelType.selectedValue.get() == "LegoBlock")
+					voxel.draw(legoBlockModel);
+
 			}
+			ofDisableLighting();
+			ofPopMatrix();
 		}
-		ofDisableLighting();
-		ofPopMatrix();
+
 
 		ofDisableDepthTest();
 

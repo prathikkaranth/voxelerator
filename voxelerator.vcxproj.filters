@@ -49,9 +49,6 @@
     <ClCompile Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\fileParser.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\voxel.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -65,6 +62,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\hittable_list.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxDropdownOption.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxDropdown.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -410,9 +413,6 @@
     <ClInclude Include="D:\Software\OpenFrameworkSource\OpenFramework\addons\ofxGui\src\ofxToggle.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\fileParser.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\voxel.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -432,6 +432,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\hittable_list.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxDropdownOption.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxDropdown.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

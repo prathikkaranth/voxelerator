@@ -6,6 +6,7 @@
 #include "ofMesh.h"
 #include "voxel.h"
 #include "ofxGui.h"
+#include "ofxDropdown.h"
 #include "ray.h"
 #include "aabb.h"
 #include "bvh.h"
@@ -37,6 +38,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		void voxelerateMesh(const std::shared_ptr<hittable>& hitBVH, aabb bbox);
+		void onModelChange();
 		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;
@@ -44,6 +46,9 @@ class ofApp : public ofBaseApp{
 		// GUI
 		ofxPanel gui;
 		ofParameter<ofVec3f> uiPosition;
+		ofParameter<string> options;
+
+		ofxDropdown_<string> boxModelType{ "boxModelType" };
 
 		// Lights
 		//
@@ -54,6 +59,9 @@ class ofApp : public ofBaseApp{
 		bool drawModel = true;
 		bool voxelerate = false;
 
+		bool roundBox = false;
+		bool legoBlock = false;
+
 		fileParser boidModel;
 
 		std::vector<glm::vec3> vertices;
@@ -62,7 +70,8 @@ class ofApp : public ofBaseApp{
 		std::vector<Voxel> voxels;
 
 		ofxAssimpModelLoader model;
-		ofxAssimpModelLoader boxModel;
+		ofxAssimpModelLoader roundBoxModel;
+		ofxAssimpModelLoader legoBlockModel;
 
 		ofBoxPrimitive boundingBox;
 
