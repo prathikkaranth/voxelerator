@@ -57,7 +57,7 @@ class ofApp : public ofBaseApp{
 		// Lights
 		//
 		ofLight light1;
-		ofMaterial birdMaterial;
+		ofMaterial modelMaterial;
 		bool modelLoaded = false;
 
 		bool drawModel = true;
@@ -65,9 +65,6 @@ class ofApp : public ofBaseApp{
 
 		bool roundBox = false;
 		bool legoBlock = false;
-
-		std::vector<glm::vec3> vertices;
-		std::vector<glm::uvec3> faces;
 
 		std::vector<Voxel> voxels;
 

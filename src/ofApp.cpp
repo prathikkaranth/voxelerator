@@ -9,14 +9,21 @@ void ofApp::setup() {
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
 
+	//Cam
+	//
+	cam.setPosition(0, 0, -10);
+	cam.lookAt(glm::vec3(0, 0, 0));
+
 	// GUI
 	//
 	gui.setup();
-	gui.add(uiPosition.set("Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
+	gui.add(uiPosition.set("Light Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
 
 	gui.add(&boxModelType);
 	boxModelType.add("RoundBox");
 	boxModelType.add("LegoBlock");
+
+	boxModelType.setSelectedValueByName("RoundBox", 0);
 
 	// Main model
 	if (!model.loadModel("geo/Bonsai/model.obj")) {
@@ -40,8 +47,8 @@ void ofApp::setup() {
 		ofExit();
 	}
 
+	model.setRotation(0, 180, 0, 0, 1);
 	model.setScale(0.01, 0.01, 0.01);
-
 	roundBoxModel.setRotation(0, 180, 1, 0, 0);
 	roundBoxModel.setScale(0.0002, 0.0002, 0.0002);
 	legoBlockModel.setRotation(0, 180, 1, 0, 0);
@@ -154,13 +161,6 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 	for (auto& t : threads) {
 		t.join();
 	}
-
-	/*for (int i = 0; i < voxels.size(); i++) {
-		for (int m = 0; m < model.getMeshCount(); m++)
-		{
-			voxels[i].voxelRay(model.getMesh(m), model.getModelMatrix(), hitBVH);
-		}
-	}*/
 }
 
 //--------------------------------------------------------------
@@ -201,13 +201,13 @@ void ofApp::draw(){
 		if (drawModel) {
 			ofPushMatrix();
 			ofEnableLighting();
-			birdMaterial.setDiffuseColor(ofColor::red);
-			birdMaterial.begin();
+			modelMaterial.setDiffuseColor(ofColor::red);
+			modelMaterial.begin();
 			model.enableMaterials();
 			model.enableColors();
 			model.enableNormals();
 			model.drawFaces();
-			birdMaterial.end();
+			modelMaterial.end();
 			ofDisableLighting();
 			ofPopMatrix();
 		}
@@ -227,8 +227,6 @@ void ofApp::draw(){
 			ofDisableLighting();
 			ofPopMatrix();
 		}
-
-
 		ofDisableDepthTest();
 
 	cam.end();

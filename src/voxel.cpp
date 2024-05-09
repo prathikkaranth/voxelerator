@@ -20,12 +20,6 @@ void Voxel::draw(ofxAssimpModelLoader &boxModel) {
 
 	}
 	static constexpr int voxelSize = sizeof(Voxel);
-	
-	/*voxel.draw();*/
-	
-	/*ofSetColor(255, 255, 0);
-	ofSetLineWidth(3);
-	ofDrawLine(glm::vec3(mPosition.x, mPosition.y, mPosition.z), glm::vec3(mPosition.x, mPosition.y - 25, mPosition.z));*/
 
 }
 
