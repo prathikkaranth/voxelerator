@@ -8,6 +8,9 @@ class material;
 
 struct hit_record {
     point3 p;
+    glm::vec3 normal;
+
+    ofFloatColor color;
     double t;
  
 };

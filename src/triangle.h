@@ -6,10 +6,12 @@
 
 class Triangle : public hittable {
 	public:
-		Triangle(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2) {
+		Triangle(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, ofFloatColor color) {
 			mVert0 = v0;
 			mVert1 = v1;
 			mVert2 = v2;
+
+			mColor = color;			
 		}
 		
 		virtual bool hit(const Ray& r, double t_min, double t_max, hit_record& rec) const override;
@@ -19,6 +21,8 @@ class Triangle : public hittable {
 		glm::vec3 mVert0;
 		glm::vec3 mVert1;
 		glm::vec3 mVert2;
+		ofFloatColor mColor;
+
 
 };
 

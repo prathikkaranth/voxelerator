@@ -82,6 +82,7 @@ bool Triangle::hit(const Ray& r, double t_min, double t_max, hit_record& rec) co
 	// Step 5: Find ray intersection
 	rec.t = t;
 	rec.p = P;
+	rec.color = mColor;
 
 	return true;
 }

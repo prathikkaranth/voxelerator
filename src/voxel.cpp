@@ -6,21 +6,39 @@ ofBoxPrimitive Voxel::sBoxPrimitive;
 Voxel::Voxel(glm::vec3 pos, float size) {
 	mPosition = pos;
 
-	sBoxPrimitive.setPosition(pos);
+	/*sBoxPrimitive.setPosition(pos);*/
 	sBoxPrimitive.set(size);
 }
 
-void Voxel::draw(ofxAssimpModelLoader &boxModel) {
-	sBoxPrimitive.setPosition(mPosition);
-	boxModel.setPosition(mPosition.x, mPosition.y, mPosition.z);
+void Voxel::draw() {
+	/*sBoxPrimitive.setPosition(mPosition);*/
 
 	if (isVisible) {
-		/*sBoxPrimitive.draw();*/
-		boxModel.drawFaces();
-
+		sBoxPrimitive.setPosition(mPosition);
+		sBoxPrimitive.setSideColor(0, mColor);
+		sBoxPrimitive.setSideColor(1, mColor);
+		sBoxPrimitive.setSideColor(2, mColor);
+		sBoxPrimitive.setSideColor(3, mColor);
+		sBoxPrimitive.setSideColor(4, mColor);
+		sBoxPrimitive.setSideColor(5, mColor);
+		sBoxPrimitive.draw();
 	}
 	static constexpr int voxelSize = sizeof(Voxel);
+}
 
+void Voxel::draw(ofxAssimpModelLoader &boxModel) {
+
+	
+	if (isVisible) {
+
+		boxModel.setPosition(mPosition.x, mPosition.y, mPosition.z);
+
+		ofxAssimpMeshHelper& meshHelper =  boxModel.getMeshHelper(0);
+		meshHelper.material.setDiffuseColor(mColor);
+
+		boxModel.drawFaces();
+	}
+	static constexpr int voxelSize = sizeof(Voxel);
 }
 
 void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
@@ -37,32 +55,10 @@ void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittabl
 	
 }
 
-int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH) {
+int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH, ofFloatColor& colorOut) {
 
 	glm::vec2 bary;
 	int intersectionCount = 0;
-
-	//for (unsigned int i= 0; i < mesh.getNumIndices(); i += 3) {
-	//	glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
-	//	glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
-	//	glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
-
-	//	// transform vertices to world space
-	//	v0 = glm::vec3(modelMatrix * glm::vec4(v0, 1));
-	//	v1 = glm::vec3(modelMatrix * glm::vec4(v1, 1));
-	//	v2 = glm::vec3(modelMatrix * glm::vec4(v2, 1));
-	//	 
-	//	float dist;
-
-	//	bool hit = rayTriangleIntersection(ray, v0, v1, v2, dist);
-
-	//	if (hit) {
-	//		intersectionCount++;
-	//		shortestDist = std::min(dist, shortestDist);
-	//	}
-	//}	
-
-
 
 	hit_record rec;
 	bool hitBV = hitBVH->hit(ray, 0.0001, std::numeric_limits<float>::max(), rec);
@@ -72,6 +68,7 @@ int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray,
 	}
 
 	distOut = rec.t;
+	colorOut = rec.color;
 	return intersectionCount;
 }
 
@@ -90,44 +87,17 @@ float Voxel::shortestDistanceMesh(const glm::mat4& modelMatrix, const std::share
 
 	for (const auto& direction : directions) {
 		float dist;
-		int intersectionCount = intersectsMesh(modelMatrix, dist, Ray(mPosition, direction), hitBVH);
-		if (intersectionCount % 2 != 0) {
-			shortestDist = std::min(dist, shortestDist);
+		ofFloatColor color;
+		int intersectionCount = intersectsMesh(modelMatrix, dist, Ray(mPosition, direction), hitBVH, color);
+		if (intersectionCount % 2 != 0 && dist < shortestDist) {
+			shortestDist = dist;
+			mColor = color;
 		}
 	}
 	return shortestDist;
 
 }
 
-
-bool Voxel::rayTriangleIntersection(Ray ray, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, float& t) {
-
-	glm::vec3 edge1 = v1 - v0;
-	glm::vec3 edge2 = v2 - v0;
-	glm::vec3 h = glm::cross(ray.direction, edge2);
-	float det = glm::dot(edge1, h);
-
-	if (det > -0.00001 && det < 0.00001) return false;
-
-	float invDet = 1.0 / det;
-	glm::vec3 s = ray.origin - v0;
-	float u = invDet * glm::dot(s, h);
-
-	if (u < 0 || u > 1) return false;
-
-	glm::vec3 q = glm::cross(s, edge1);
-	float v = invDet * glm::dot(ray.direction, q);
-
-	if (v < 0 || u + v > 1) return false;
-
-	t = invDet * glm::dot(edge2, q);
-
-	if (t > 0.00001) {
-		return true;
-	}
-
-	return false;
-}
 
 
 

@@ -57,7 +57,6 @@ class ofApp : public ofBaseApp{
 		// Lights
 		//
 		ofLight light1;
-		ofMaterial modelMaterial;
 		bool modelLoaded = false;
 
 		bool drawModel = true;
@@ -65,12 +64,18 @@ class ofApp : public ofBaseApp{
 
 		bool roundBox = false;
 		bool legoBlock = false;
+		bool ofBox = false;
 
 		std::vector<Voxel> voxels;
 
 		ofxAssimpModelLoader model;
+		ofMaterial modelMaterial;
+
 		ofxAssimpModelLoader roundBoxModel;
+		ofMaterial roundBoxMaterial;
+
 		ofxAssimpModelLoader legoBlockModel;
+		ofMaterial legoBlockMaterial;
 
 		ofBoxPrimitive boundingBox;
 

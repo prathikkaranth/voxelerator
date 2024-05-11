@@ -22,6 +22,7 @@ void ofApp::setup() {
 	gui.add(&boxModelType);
 	boxModelType.add("RoundBox");
 	boxModelType.add("LegoBlock");
+	boxModelType.add("ofBox");
 
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
@@ -94,18 +95,20 @@ std::shared_ptr<hittable> ofApp::scene() {
 	hittable_list objects;
 	for (int m = 0; m < model.getMeshCount(); m++) {
 		ofMesh mesh = model.getMesh(m);
+		ofMaterial material = model.getMaterialForMesh(m);
+		ofFloatColor color = material.getDiffuseColor();
 		for (int i = 0; i < mesh.getNumIndices(); i += 3) {
 			glm::vec3 v0 = mesh.getVertex(mesh.getIndex(i));
 			glm::vec3 v1 = mesh.getVertex(mesh.getIndex(i + 1));
 			glm::vec3 v2 = mesh.getVertex(mesh.getIndex(i + 2));
-
+			
 			// transform vertices to world space
 			v0 = glm::vec3(model.getModelMatrix() * glm::vec4(v0, 1));
 			v1 = glm::vec3(model.getModelMatrix() * glm::vec4(v1, 1));
 			v2 = glm::vec3(model.getModelMatrix() * glm::vec4(v2, 1));
 
 			objects.add(
-				std::make_shared<Triangle>(v0, v1, v2)
+				std::make_shared<Triangle>(v0, v1, v2, color)
 			);
 		}
 	}
@@ -123,13 +126,11 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 	const float voxelSizeX = (bbox.max().x - bbox.min().x) / gridSize;
 	const float voxelSizeY = (bbox.max().y - bbox.min().y) / gridSize;
 	const float voxelSizeZ = (bbox.max().z - bbox.min().z) / gridSize;
-	const float boxPrimSize = std::min(std::min(voxelSizeX, voxelSizeY), voxelSizeZ) / 2.0f;
+	const float boxPrimSize = 0.1;
 
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			for (int z = 0; z < gridSize; z++) {
-				// gridx -> 0 to gridSize - 1, worldX -> bbox.min().x to bbox.max().x 
-
 
 				// gridx == 0 -> worldX = bbox.min().x, gridx == 1 --> worldX = bbox.min().x + voxelSizeX
 				const float worldX = bbox.min().x + x * voxelSizeX;
@@ -217,11 +218,27 @@ void ofApp::draw(){
 			ofPushMatrix();
 			ofEnableLighting();
 			for (auto& voxel : voxels) {
+				
+				/*roundBoxMaterial.begin();
+				roundBoxModel.enableMaterials();
+				roundBoxModel.enableColors();
+				roundBoxModel.enableNormals();*/
 
-				if(boxModelType.selectedValue.get() == "RoundBox")
+				if (boxModelType.selectedValue.get() == "RoundBox") {
+					//roundBoxMaterial.setDiffuseColor(ofColor(1.0, 0.0, 0.0));
+					//roundBoxMaterial.begin();
+					//roundBoxModel.enableMaterials();
+					//roundBoxModel.enableColors();
+					//roundBoxModel.enableNormals();
 					voxel.draw(roundBoxModel);
+					//roundBoxMaterial.end();
+				}
+
 				else if (boxModelType.selectedValue.get() == "LegoBlock")
 					voxel.draw(legoBlockModel);
+
+				else if (boxModelType.selectedValue.get() == "ofBox")
+					voxel.draw();
 
 			}
 			ofDisableLighting();
