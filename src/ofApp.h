@@ -72,10 +72,10 @@ class ofApp : public ofBaseApp{
 		ofMaterial modelMaterial;
 
 		ofxAssimpModelLoader roundBoxModel;
-		ofMaterial roundBoxMaterial;
 
 		ofxAssimpModelLoader legoBlockModel;
-		ofMaterial legoBlockMaterial;
+
+		ofxAssimpModelLoader sphereModel;
 
 		ofBoxPrimitive boundingBox;
 

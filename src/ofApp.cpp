@@ -23,6 +23,7 @@ void ofApp::setup() {
 	boxModelType.add("RoundBox");
 	boxModelType.add("LegoBlock");
 	boxModelType.add("ofBox");
+	boxModelType.add("Sphere");
 
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
@@ -48,12 +49,19 @@ void ofApp::setup() {
 		ofExit();
 	}
 
+	if (!sphereModel.loadModel("geo/Sphere/sphere.obj")) {
+		cout << "Can't load model" << endl;
+		ofExit();
+	}
+
 	model.setRotation(0, 180, 0, 0, 1);
 	model.setScale(0.01, 0.01, 0.01);
 	roundBoxModel.setRotation(0, 180, 1, 0, 0);
 	roundBoxModel.setScale(0.0002, 0.0002, 0.0002);
 	legoBlockModel.setRotation(0, 180, 1, 0, 0);
 	legoBlockModel.setScale(0.0002, 0.0002, 0.0002);
+	sphereModel.setRotation(0, 180, 1, 0, 0);
+	sphereModel.setScale(0.0002, 0.0002, 0.0002);
 	
 	// Set up lighting
 	//
@@ -218,20 +226,9 @@ void ofApp::draw(){
 			ofPushMatrix();
 			ofEnableLighting();
 			for (auto& voxel : voxels) {
-				
-				/*roundBoxMaterial.begin();
-				roundBoxModel.enableMaterials();
-				roundBoxModel.enableColors();
-				roundBoxModel.enableNormals();*/
 
-				if (boxModelType.selectedValue.get() == "RoundBox") {
-					//roundBoxMaterial.setDiffuseColor(ofColor(1.0, 0.0, 0.0));
-					//roundBoxMaterial.begin();
-					//roundBoxModel.enableMaterials();
-					//roundBoxModel.enableColors();
-					//roundBoxModel.enableNormals();
+				if (boxModelType.selectedValue.get() == "RoundBox") {	
 					voxel.draw(roundBoxModel);
-					//roundBoxMaterial.end();
 				}
 
 				else if (boxModelType.selectedValue.get() == "LegoBlock")
@@ -239,6 +236,9 @@ void ofApp::draw(){
 
 				else if (boxModelType.selectedValue.get() == "ofBox")
 					voxel.draw();
+
+				else if (boxModelType.selectedValue.get() == "Sphere")
+					voxel.draw(sphereModel);
 
 			}
 			ofDisableLighting();
