@@ -53,6 +53,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<float> roundBoxSize;
 		ofParameter<float> legoBlockSize;
 		ofParameter<float> sphereSize;
+		ofParameter<float> boxSize;
 
 		ofxDropdown_<string> boxModelType{ "boxModelType" };
 
@@ -65,9 +66,9 @@ class ofApp : public ofBaseApp{
 		bool voxelerate = false;
 		bool boundingBoxVisible = false;
 
-		bool roundBox = false;
+		/*bool roundBox = false;
 		bool legoBlock = false;
-		bool ofBox = false;
+		bool box = false;*/
 
 		std::vector<Voxel> voxels;
 
@@ -79,6 +80,8 @@ class ofApp : public ofBaseApp{
 		ofxAssimpModelLoader legoBlockModel;
 
 		ofxAssimpModelLoader sphereModel;
+
+		ofxAssimpModelLoader boxModel;
 
 		ofBoxPrimitive boundingBox;
 

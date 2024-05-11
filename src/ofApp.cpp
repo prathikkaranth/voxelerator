@@ -18,20 +18,21 @@ void ofApp::setup() {
 	//
 	gui.setup();
 	gui.add(uiPosition.set("Light Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
-	gui.add(roundBoxSize.set("RoundBox Size", 0.00031, 0.0001, 0.001));
-	gui.add(legoBlockSize.set("LegoBlock Size", 0.00031, 0.0001, 0.001));
-	gui.add(sphereSize.set("Sphere Size", 0.00031, 0.0001, 0.001));
+	gui.add(roundBoxSize.set("RoundBox Size", 0.0003205, 0.0001, 0.001));
+	gui.add(legoBlockSize.set("LegoBlock Size", 0.000361, 0.0001, 0.001));
+	gui.add(sphereSize.set("Sphere Size", 0.0003205, 0.0001, 0.001));
+	gui.add(boxSize.set("Box Size", 0.0003205, 0.0001, 0.001));
 
 	gui.add(&boxModelType);
 	boxModelType.add("RoundBox");
 	boxModelType.add("LegoBlock");
-	boxModelType.add("ofBox");
+	boxModelType.add("Box");
 	boxModelType.add("Sphere");
 
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
 	// Main model
-	if (!model.loadModel("geo/Doodle/model.obj")) {
+	if (!model.loadModel("geo/Terrain/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -57,6 +58,11 @@ void ofApp::setup() {
 		ofExit();
 	}
 
+	if (!boxModel.loadModel("geo/Cube/Cube.obj")) {
+		cout << "Can't load model" << endl;
+		ofExit();
+	}
+
 	// First time setup
 	model.setRotation(0, 180, 0, 0, 1);
 	model.setScale(0.03, 0.03, 0.03);
@@ -65,10 +71,14 @@ void ofApp::setup() {
 	roundBoxModel.setScale(roundBoxSize, roundBoxSize, roundBoxSize);
 
 	legoBlockModel.setRotation(0, 180, 1, 0, 0);
-	legoBlockModel.setScale(legoBlockSize, legoBlockSize, legoBlockSize);
+	legoBlockModel.setScale(legoBlockSize, legoBlockSize+0.0001, legoBlockSize);
 
 	sphereModel.setRotation(0, 180, 1, 0, 0);
 	sphereModel.setScale(sphereSize, sphereSize, sphereSize);
+
+	boxModel.setRotation(0, 180, 1, 0, 0);
+	boxModel.setScale(boxSize, boxSize, boxSize);
+
 	
 	// Set up lighting
 	//
@@ -209,9 +219,9 @@ void ofApp::update(){
 
 	light1.setPosition(uiPosition->x, uiPosition->y, uiPosition->z);
 	roundBoxModel.setScale(roundBoxSize, roundBoxSize, roundBoxSize);
-	legoBlockModel.setScale(legoBlockSize, legoBlockSize, legoBlockSize);
+	legoBlockModel.setScale(legoBlockSize, legoBlockSize + 0.0001, legoBlockSize);
 	sphereModel.setScale(sphereSize, sphereSize, sphereSize);
-
+	boxModel.setScale(boxSize, boxSize, boxSize);
 }
 
 //--------------------------------------------------------------
@@ -272,8 +282,8 @@ void ofApp::draw(){
 				else if (boxModelType.selectedValue.get() == "LegoBlock")
 					voxel.draw(legoBlockModel);
 
-				else if (boxModelType.selectedValue.get() == "ofBox")
-					voxel.draw();
+				else if (boxModelType.selectedValue.get() == "Box")
+					voxel.draw(boxModel);
 
 				else if (boxModelType.selectedValue.get() == "Sphere")
 					voxel.draw(sphereModel);
