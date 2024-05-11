@@ -18,9 +18,9 @@ void ofApp::setup() {
 	//
 	gui.setup();
 	gui.add(uiPosition.set("Light Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
-	gui.add(roundBoxSize.set("RoundBox Size", 0.00025, 0.0001, 0.001));
-	gui.add(legoBlockSize.set("LegoBlock Size", 0.00025, 0.0001, 0.001));
-	gui.add(sphereSize.set("Sphere Size", 0.00025, 0.0001, 0.001));
+	gui.add(roundBoxSize.set("RoundBox Size", 0.00031, 0.0001, 0.001));
+	gui.add(legoBlockSize.set("LegoBlock Size", 0.00031, 0.0001, 0.001));
+	gui.add(sphereSize.set("Sphere Size", 0.00031, 0.0001, 0.001));
 
 	gui.add(&boxModelType);
 	boxModelType.add("RoundBox");
@@ -59,7 +59,7 @@ void ofApp::setup() {
 
 	// First time setup
 	model.setRotation(0, 180, 0, 0, 1);
-	model.setScale(0.01, 0.01, 0.01);
+	model.setScale(0.03, 0.03, 0.03);
 
 	roundBoxModel.setRotation(0, 180, 1, 0, 0);
 	roundBoxModel.setScale(roundBoxSize, roundBoxSize, roundBoxSize);
@@ -136,7 +136,7 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 
-	const int gridSize = 40;
+	const int gridSize = 100;
 
 	const float bboxWidth = bbox.max().x - bbox.min().x;
 	const float bboxHeight = bbox.max().y - bbox.min().y;
@@ -185,7 +185,7 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 		}
 	}
 
-	const auto numThreads = 16;
+	const auto numThreads = 32;
 	const auto numVoxelsPerThread = voxels.size() / numThreads;
 
 	std::vector<std::thread> threads;
@@ -236,11 +236,13 @@ void ofApp::draw(){
 		ofPopMatrix();
 
 		// draw bounding box
-		ofPushMatrix();
-		ofSetColor(ofColor::white);
-		ofNoFill();
-		boundingBox.drawWireframe();
-		ofPopMatrix();
+		if (boundingBoxVisible) {
+			ofPushMatrix();
+			ofSetColor(ofColor::white);
+			ofNoFill();
+			boundingBox.drawWireframe();
+			ofPopMatrix();
+		}
 
 		// draw model
 		if (drawModel) {
@@ -294,15 +296,18 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
 	
 	if (key == 'v') {
-		voxelerate = true;
 		drawModel = false;
+		voxelerate = true;
 	}
 
 	if (key == 'm') {
 		drawModel = true;
 		voxelerate = false;
 	}
-	
+
+	if (key == 'b') {
+		boundingBoxVisible = !boundingBoxVisible;
+	}
 	
 }
 

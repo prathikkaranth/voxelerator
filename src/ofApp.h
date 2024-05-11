@@ -63,6 +63,7 @@ class ofApp : public ofBaseApp{
 
 		bool drawModel = true;
 		bool voxelerate = false;
+		bool boundingBoxVisible = false;
 
 		bool roundBox = false;
 		bool legoBlock = false;

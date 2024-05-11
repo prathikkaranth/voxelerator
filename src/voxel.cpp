@@ -21,6 +21,9 @@ void Voxel::draw() {
 		sBoxPrimitive.setSideColor(3, mColor);
 		sBoxPrimitive.setSideColor(4, mColor);
 		sBoxPrimitive.setSideColor(5, mColor);
+
+		
+
 		sBoxPrimitive.draw();
 	}
 	static constexpr int voxelSize = sizeof(Voxel);
