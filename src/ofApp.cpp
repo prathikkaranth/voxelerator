@@ -18,6 +18,9 @@ void ofApp::setup() {
 	//
 	gui.setup();
 	gui.add(uiPosition.set("Light Position", ofVec3f(0, 3.67347, -5.20408), ofVec3f(-30, -30, -30), ofVec3f(30, 30, 30)));
+	gui.add(roundBoxSize.set("RoundBox Size", 0.00025, 0.0001, 0.001));
+	gui.add(legoBlockSize.set("LegoBlock Size", 0.00025, 0.0001, 0.001));
+	gui.add(sphereSize.set("Sphere Size", 0.00025, 0.0001, 0.001));
 
 	gui.add(&boxModelType);
 	boxModelType.add("RoundBox");
@@ -28,7 +31,7 @@ void ofApp::setup() {
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
 	// Main model
-	if (!model.loadModel("geo/Bonsai/model.obj")) {
+	if (!model.loadModel("geo/Doodle/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -54,14 +57,18 @@ void ofApp::setup() {
 		ofExit();
 	}
 
+	// First time setup
 	model.setRotation(0, 180, 0, 0, 1);
 	model.setScale(0.01, 0.01, 0.01);
+
 	roundBoxModel.setRotation(0, 180, 1, 0, 0);
-	roundBoxModel.setScale(0.0002, 0.0002, 0.0002);
+	roundBoxModel.setScale(roundBoxSize, roundBoxSize, roundBoxSize);
+
 	legoBlockModel.setRotation(0, 180, 1, 0, 0);
-	legoBlockModel.setScale(0.0002, 0.0002, 0.0002);
+	legoBlockModel.setScale(legoBlockSize, legoBlockSize, legoBlockSize);
+
 	sphereModel.setRotation(0, 180, 1, 0, 0);
-	sphereModel.setScale(0.0002, 0.0002, 0.0002);
+	sphereModel.setScale(sphereSize, sphereSize, sphereSize);
 	
 	// Set up lighting
 	//
@@ -73,7 +80,7 @@ void ofApp::setup() {
 	/*light1.setPosition(0, 10, 0);*/
 	light1.setDiffuseColor(ofColor(255.f, 255.f, 255.f));
 	light1.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-	light1.setAmbientColor(ofColor(150, 150, 150));
+	light1.setAmbientColor(ofColor(50, 50, 50));
 
 	// spawn voxels in a grid 
 	//
@@ -129,16 +136,41 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 
-	const int gridSize = 37;
+	const int gridSize = 40;
 
-	const float voxelSizeX = (bbox.max().x - bbox.min().x) / gridSize;
-	const float voxelSizeY = (bbox.max().y - bbox.min().y) / gridSize;
-	const float voxelSizeZ = (bbox.max().z - bbox.min().z) / gridSize;
-	const float boxPrimSize = 0.1;
+	const float bboxWidth = bbox.max().x - bbox.min().x;
+	const float bboxHeight = bbox.max().y - bbox.min().y;
+	const float bboxDepth = bbox.max().z - bbox.min().z;
 
-	for (int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize; y++) {
-			for (int z = 0; z < gridSize; z++) {
+	int gridSizeX, gridSizeY, gridSizeZ;
+	if (bboxWidth > bboxHeight && bboxWidth > bboxDepth) {
+		gridSizeX = gridSize;
+		gridSizeY = gridSize * bboxHeight / bboxWidth;
+		gridSizeZ = gridSize * bboxDepth / bboxWidth;
+	}
+	else if (bboxHeight > bboxWidth && bboxHeight > bboxDepth) {
+		gridSizeX = gridSize * bboxWidth / bboxHeight;
+		gridSizeY = gridSize;
+		gridSizeZ = gridSize * bboxDepth / bboxHeight;
+	}
+	else {
+		gridSizeX = gridSize * bboxWidth / bboxDepth;
+		gridSizeY = gridSize * bboxHeight / bboxDepth;
+		gridSizeZ = gridSize;
+	}
+
+	const float voxelSizeX = bboxWidth / gridSizeX;
+	const float voxelSizeY = bboxHeight / gridSizeY;
+	const float voxelSizeZ = bboxDepth / gridSizeZ;
+
+	const float bboxMin = std::min(std::min(bboxWidth, bboxHeight), bboxDepth);
+	const float boxPrimSize = bboxMin * 0.1 / 3.18903;
+
+	std::cout << "bboxWidth: " << bboxWidth << " bboxHeight: " << bboxHeight << " bboxDepth: " << bboxDepth << std::endl;
+
+	for (int x = 0; x < gridSizeX; x++) {
+		for (int y = 0; y < gridSizeY; y++) {
+			for (int z = 0; z < gridSizeZ; z++) {
 
 				// gridx == 0 -> worldX = bbox.min().x, gridx == 1 --> worldX = bbox.min().x + voxelSizeX
 				const float worldX = bbox.min().x + x * voxelSizeX;
@@ -146,8 +178,8 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 				const float worldZ = bbox.min().z + z * voxelSizeZ;
 
 				float offset = 0.50;
-
-				glm::vec3 position(worldX + offset * voxelSizeX, worldY + offset * voxelSizeY, worldZ + offset * voxelSizeZ);
+				glm::vec3 position(worldX, worldY, worldZ);
+				/*glm::vec3 position(worldX + offset * voxelSizeX, worldY + offset * voxelSizeY, worldZ + offset * voxelSizeZ);*/
 				voxels.push_back(Voxel(position, boxPrimSize));
 			}
 		}
@@ -176,6 +208,10 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 void ofApp::update(){
 
 	light1.setPosition(uiPosition->x, uiPosition->y, uiPosition->z);
+	roundBoxModel.setScale(roundBoxSize, roundBoxSize, roundBoxSize);
+	legoBlockModel.setScale(legoBlockSize, legoBlockSize, legoBlockSize);
+	sphereModel.setScale(sphereSize, sphereSize, sphereSize);
+
 }
 
 //--------------------------------------------------------------

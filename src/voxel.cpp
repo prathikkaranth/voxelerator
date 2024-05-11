@@ -45,7 +45,7 @@ void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittabl
 
 	float shortestDist = shortestDistanceMesh(modelMatrix, hitBVH);
 
-	if (shortestDist < 0.065) {
+	if (shortestDist < 0.085) {
 		isVisible = true;
 	}
 	else {

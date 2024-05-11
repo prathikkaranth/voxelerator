@@ -50,7 +50,9 @@ class ofApp : public ofBaseApp{
 		// GUI
 		ofxPanel gui;
 		ofParameter<ofVec3f> uiPosition;
-		ofParameter<string> options;
+		ofParameter<float> roundBoxSize;
+		ofParameter<float> legoBlockSize;
+		ofParameter<float> sphereSize;
 
 		ofxDropdown_<string> boxModelType{ "boxModelType" };
 
