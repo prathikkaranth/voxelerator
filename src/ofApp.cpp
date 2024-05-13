@@ -4,7 +4,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofSetBackgroundColor(ofColor::darkGrey);
+	ofSetBackgroundColor(ofColor::lightSkyBlue);
 	cam.setDistance(10);
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
@@ -32,7 +32,7 @@ void ofApp::setup() {
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
 	// Main model
-	if (!model.loadModel("geo/Terrain/model.obj")) {
+	if (!model.loadModel("geo/Bonsai/model.obj")) {
 		cout << "Can't load model" << endl;
 		ofExit();
 	}
@@ -89,8 +89,8 @@ void ofApp::setup() {
 	light1.enable();
 	/*light1.setPosition(0, 10, 0);*/
 	light1.setDiffuseColor(ofColor(255.f, 255.f, 255.f));
-	light1.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-	light1.setAmbientColor(ofColor(50, 50, 50));
+	light1.setSpecularColor(ofColor(125.f, 125.f, 125.f));
+	light1.setAmbientColor(ofColor(150.0f, 150.0f, 150.0f));
 
 	// spawn voxels in a grid 
 	//
@@ -176,8 +176,6 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 	const float bboxMin = std::min(std::min(bboxWidth, bboxHeight), bboxDepth);
 	const float boxPrimSize = bboxMin * 0.1 / 3.18903;
 
-	std::cout << "bboxWidth: " << bboxWidth << " bboxHeight: " << bboxHeight << " bboxDepth: " << bboxDepth << std::endl;
-
 	for (int x = 0; x < gridSizeX; x++) {
 		for (int y = 0; y < gridSizeY; y++) {
 			for (int z = 0; z < gridSizeZ; z++) {
@@ -222,6 +220,12 @@ void ofApp::update(){
 	legoBlockModel.setScale(legoBlockSize, legoBlockSize + 0.0001, legoBlockSize);
 	sphereModel.setScale(sphereSize, sphereSize, sphereSize);
 	boxModel.setScale(boxSize, boxSize, boxSize);
+
+
+	if (boxModelType.selectedValue.get() == "Box")
+		light1.setAmbientColor(ofColor(10.0f, 10.0f, 10.0f));
+	else
+		light1.setAmbientColor(ofColor(150.0f, 150.0f, 150.0f));
 }
 
 //--------------------------------------------------------------
