@@ -46,6 +46,7 @@ class ofApp : public ofBaseApp{
 		std::shared_ptr<hittable> scene();
 
 		ofEasyCam cam;
+		/*ofCamera cam;*/
 
 		// GUI
 		ofxPanel gui;
@@ -65,6 +66,7 @@ class ofApp : public ofBaseApp{
 		bool drawModel = true;
 		bool voxelerate = false;
 		bool boundingBoxVisible = false;
+		bool gridVisible = false;
 
 		/*bool roundBox = false;
 		bool legoBlock = false;

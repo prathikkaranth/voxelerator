@@ -5,14 +5,14 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetBackgroundColor(ofColor::lightSkyBlue);
-	cam.setDistance(10);
 	cam.setNearClip(.1);
 	ofEnableDepthTest();
 
 	//Cam
 	//
 	cam.setPosition(0, 0, -10);
-	cam.lookAt(glm::vec3(0, 0, 0));
+	/*cam.setPosition(-9, 3, 0);*/
+	cam.lookAt(glm::vec3(0, 3, 0));
 
 	// GUI
 	//
@@ -33,7 +33,7 @@ void ofApp::setup() {
 
 	// Main model
 	if (!model.loadModel("geo/Bonsai/model.obj")) {
-		cout << "Can't load model" << endl;
+		cout << "model not found" << endl;
 		ofExit();
 	}
 
@@ -44,22 +44,22 @@ void ofApp::setup() {
 	// VoxelBox
 	//
 	if (!roundBoxModel.loadModel("geo/RoundCube/RoundCube.obj")) {
-		cout << "Can't load model" << endl;
+		cout << "model not found" << endl;
 		ofExit();
 	}
 
 	if (!legoBlockModel.loadModel("geo/LEGO/model.obj")) {
-		cout << "Can't load model" << endl;
+		cout << "model not found" << endl;
 		ofExit();
 	}
 
 	if (!sphereModel.loadModel("geo/Sphere/sphere.obj")) {
-		cout << "Can't load model" << endl;
+		cout << "model not found" << endl;
 		ofExit();
 	}
 
 	if (!boxModel.loadModel("geo/Cube/Cube.obj")) {
-		cout << "Can't load model" << endl;
+		cout << "model not found" << endl;
 		ofExit();
 	}
 
@@ -146,7 +146,7 @@ std::shared_ptr<hittable> ofApp::scene() {
 
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 
-	const int gridSize = 100;
+	const int gridSize = 100;  // grid resolution
 
 	const float bboxWidth = bbox.max().x - bbox.min().x;
 	const float bboxHeight = bbox.max().y - bbox.min().y;
@@ -224,6 +224,8 @@ void ofApp::update(){
 
 	if (boxModelType.selectedValue.get() == "Box")
 		light1.setAmbientColor(ofColor(10.0f, 10.0f, 10.0f));
+	else if(drawModel)
+		light1.setAmbientColor(ofColor(10.0f, 10.0f, 10.0f));
 	else
 		light1.setAmbientColor(ofColor(150.0f, 150.0f, 150.0f));
 }
@@ -237,12 +239,15 @@ void ofApp::draw(){
 	cam.begin();
 	
 		ofEnableDepthTest();
+
 		// draw grid
-		ofPushMatrix();
-		ofSetColor(ofColor::dimGray);
-		ofRotateDeg(90);
-		ofDrawGridPlane();
-		ofPopMatrix();
+		if (gridVisible) {
+			ofPushMatrix();
+			ofSetColor(ofColor::dimGray);
+			ofRotateDeg(90);
+			ofDrawGridPlane();
+			ofPopMatrix();
+		}
 
 		// draw light
 		ofPushMatrix();
@@ -321,6 +326,10 @@ void ofApp::keyPressed(int key){
 
 	if (key == 'b') {
 		boundingBoxVisible = !boundingBoxVisible;
+	}
+
+	if (key == 'g') {
+		gridVisible = !gridVisible;
 	}
 	
 }

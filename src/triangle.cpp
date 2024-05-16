@@ -32,52 +32,21 @@
 
 bool Triangle::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const {
 
-	// Computer the plane's normal
-	glm::vec3 v0v1 = mVert1 - mVert0;
-	glm::vec3 v0v2 = mVert2 - mVert0;
+	auto N = cross(mVert1 - mVert0, mVert2 - mVert0);
+	N = normalize(N);
+	const auto h = dot(-N, mVert0);
+	const auto denom = dot(N, r.direction);
+	if (denom < 1e-9f) return false;
+	const auto t = -(dot(N, r.origin) + h) / denom;
+	if (t < 0.0f) return false;
 
-	glm::vec3 n = cross(v0v1, v0v2);
-	float area2 = n.length();
+	const auto P = r.origin + t * r.direction;
 
-	// Step 1: Finding P
+	const auto C0 = cross(mVert1 - mVert0, P - mVert0);
+	const auto C1 = cross(mVert2 - mVert1, P - mVert1);
+	const auto C2 = cross(mVert0 - mVert2, P - mVert2);
 
-	// check if ray and plane are parallel ?
-	float NdotRayDirection = dot(n, r.direction);
-	if (fabs(NdotRayDirection) < 1e-12) // almost 0 
-		return false; // they are parallel so they don't intersect !
-
-	// compute d parameter using equation 2
-	float d = dot(-n, mVert0);
-
-	// compute t (equation 3)
-	float t = -(dot(n, r.origin) + d) / NdotRayDirection;
-
-	// check if the triangle is in behind the ray
-	if (t < 0) return false; // the triangle is behind
-
-	// compute the intersection point using equation 1
-	glm::vec3 P = r.origin + t * r.direction;
-
-	// Step 2: Inside-outside test
-	glm::vec3 C; // vector perpendicular to triangle's plane
-
-	// edge 0
-	glm::vec3 edge0 = mVert1 - mVert0;
-	glm::vec3 vp0 = P - mVert0;
-	C = cross(edge0, vp0);
-	if (dot(n, C) < 0) return false; // P is on the right side
-
-	// edge 1
-	glm::vec3 edge1 = mVert2 - mVert1;
-	glm::vec3 vp1 = P - mVert1;
-	C = cross(edge1, vp1);
-	if (dot(n, C) < 0)  return false; // P is on the right side
-
-	// edge 2
-	glm::vec3 edge2 = mVert0 - mVert2;
-	glm::vec3 vp2 = P - mVert2;
-	C = cross(edge2, vp2);
-	if (dot(n, C) < 0) return false; // P is on the right side;
+	if (dot(N, C0) < 0.0f || dot(N, C1) < 0.0f || dot(N, C2) < 0.0f) return false;
 
 	// Step 5: Find ray intersection
 	rec.t = t;
