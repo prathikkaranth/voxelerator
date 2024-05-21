@@ -32,7 +32,7 @@ void ofApp::setup() {
 	boxModelType.setSelectedValueByName("RoundBox", 0);
 
 	// Main model
-	if (!model.loadModel("geo/Bonsai/model.obj")) {
+	if (!model.loadModel("../../geo/Bonsai/model.obj")) {
 		cout << "model not found" << endl;
 		ofExit();
 	}
@@ -43,22 +43,22 @@ void ofApp::setup() {
 
 	// VoxelBox
 	//
-	if (!roundBoxModel.loadModel("geo/RoundCube/RoundCube.obj")) {
+	if (!roundBoxModel.loadModel("../../geo/RoundCube/RoundCube.obj")) {
 		cout << "model not found" << endl;
 		ofExit();
 	}
 
-	if (!legoBlockModel.loadModel("geo/LEGO/model.obj")) {
+	if (!legoBlockModel.loadModel("../../geo/LEGO/model.obj")) {
 		cout << "model not found" << endl;
 		ofExit();
 	}
 
-	if (!sphereModel.loadModel("geo/Sphere/sphere.obj")) {
+	if (!sphereModel.loadModel("../../geo/Sphere/sphere.obj")) {
 		cout << "model not found" << endl;
 		ofExit();
 	}
 
-	if (!boxModel.loadModel("geo/Cube/Cube.obj")) {
+	if (!boxModel.loadModel("../../geo/Cube/Cube.obj")) {
 		cout << "model not found" << endl;
 		ofExit();
 	}
@@ -92,7 +92,7 @@ void ofApp::setup() {
 	light1.setSpecularColor(ofColor(125.f, 125.f, 125.f));
 	light1.setAmbientColor(ofColor(150.0f, 150.0f, 150.0f));
 
-	// spawn voxels in a grid 
+	// call voxelerate on loaded model
 	//
 	if (modelLoaded) {
 		const std::shared_ptr<hittable> bvh = scene();
@@ -109,6 +109,7 @@ void ofApp::setup() {
 
 }
 
+// parallel multithreaded voxel ray intersection tests to give each thread
 void ofApp::parallelVoxelRay(const std::shared_ptr<hittable>& bvh, aabb bbox, int start, int end) {
 	for (int i = start; i < end; ++i) {	
 		voxels[i].voxelRay(model.getModelMatrix(), bvh);	
@@ -116,6 +117,7 @@ void ofApp::parallelVoxelRay(const std::shared_ptr<hittable>& bvh, aabb bbox, in
 
 }
 
+// getting the scene, spatial information of the model. Also calls bvh.
 std::shared_ptr<hittable> ofApp::scene() {
 	hittable_list objects;
 	for (int m = 0; m < model.getMeshCount(); m++) {
@@ -143,7 +145,7 @@ std::shared_ptr<hittable> ofApp::scene() {
 	
 
 
-
+// main voxelerate function
 void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 
 	const int gridSize = 100;  // grid resolution
@@ -152,6 +154,7 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 	const float bboxHeight = bbox.max().y - bbox.min().y;
 	const float bboxDepth = bbox.max().z - bbox.min().z;
 
+	// determine grid size based on the longest dimension of the bounding box
 	int gridSizeX, gridSizeY, gridSizeZ;
 	if (bboxWidth > bboxHeight && bboxWidth > bboxDepth) {
 		gridSizeX = gridSize;
@@ -169,13 +172,16 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 		gridSizeZ = gridSize;
 	}
 
+	// calculate voxel size
 	const float voxelSizeX = bboxWidth / gridSizeX;
 	const float voxelSizeY = bboxHeight / gridSizeY;
 	const float voxelSizeZ = bboxDepth / gridSizeZ;
 
+	// calculate the size of the primitive to be used for the voxel
 	const float bboxMin = std::min(std::min(bboxWidth, bboxHeight), bboxDepth);
 	const float boxPrimSize = bboxMin * 0.1 / 3.18903;
 
+	// create voxels with equal spacing
 	for (int x = 0; x < gridSizeX; x++) {
 		for (int y = 0; y < gridSizeY; y++) {
 			for (int z = 0; z < gridSizeZ; z++) {
@@ -193,6 +199,7 @@ void ofApp::voxelerateMesh(const std::shared_ptr<hittable>& bvh, aabb bbox) {
 		}
 	}
 
+	// multithreading parameters
 	const auto numThreads = 32;
 	const auto numVoxelsPerThread = voxels.size() / numThreads;
 

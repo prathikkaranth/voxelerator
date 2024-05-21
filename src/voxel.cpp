@@ -3,6 +3,7 @@
 
 ofBoxPrimitive Voxel::sBoxPrimitive;
 
+// Voxel constructor
 Voxel::Voxel(glm::vec3 pos, float size) {
 	mPosition = pos;
 
@@ -10,6 +11,7 @@ Voxel::Voxel(glm::vec3 pos, float size) {
 	sBoxPrimitive.set(size);
 }
 
+// Voxel draw method for ofBox primitive
 void Voxel::draw() {
 	/*sBoxPrimitive.setPosition(mPosition);*/
 
@@ -29,6 +31,7 @@ void Voxel::draw() {
 	static constexpr int voxelSize = sizeof(Voxel);
 }
 
+// Voxel draw method for ofxAssimpModelLoader voxel model
 void Voxel::draw(ofxAssimpModelLoader &boxModel) {
 
 	
@@ -44,6 +47,7 @@ void Voxel::draw(ofxAssimpModelLoader &boxModel) {
 	static constexpr int voxelSize = sizeof(Voxel);
 }
 
+// Voxel ray method - Main logic for raycasting and findiing inside/outside voxels
 void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 
 	float shortestDist = shortestDistanceMesh(modelMatrix, hitBVH);
@@ -58,6 +62,7 @@ void Voxel::voxelRay(const glm::mat4& modelMatrix, const std::shared_ptr<hittabl
 	
 }
 
+// Voxel intersection method - Check if ray intersects with mesh
 int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray, const std::shared_ptr<hittable>& hitBVH, ofFloatColor& colorOut) {
 
 	glm::vec2 bary;
@@ -75,6 +80,7 @@ int Voxel::intersectsMesh(const glm::mat4& modelMatrix, float &distOut, Ray ray,
 	return intersectionCount;
 }
 
+// Voxel shortest distance method - Find the shortest distance from voxel to mesh using 6 rays on each face
 float Voxel::shortestDistanceMesh(const glm::mat4& modelMatrix, const std::shared_ptr<hittable>& hitBVH) {
 	
 	static constexpr std::array<glm::vec3, 6> directions = {

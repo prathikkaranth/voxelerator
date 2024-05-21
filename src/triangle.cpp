@@ -1,35 +1,5 @@
 #include "triangle.h"
 
-//bool Triangle::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const{
-//
-//	glm::vec3 edge1 = mVert1 - mVert0;
-//	glm::vec3 edge2 = mVert2 - mVert0;
-//	glm::vec3 h = glm::cross(r.direction, edge2);
-//	float det = glm::dot(edge1, h);
-//
-//	if (det > -0.00001 && det < 0.00001) return false;
-//
-//	float invDet = 1.0 / det;
-//	glm::vec3 s = r.origin - mVert0;
-//	float u = invDet * glm::dot(s, h);
-//
-//	if (u < 0 || u > 1) return false;
-//
-//	glm::vec3 q = glm::cross(s, edge1);
-//	float v = invDet * glm::dot(r.direction, q);
-//
-//	if (v < 0 || u + v > 1) return false;
-//
-//	float t = invDet * glm::dot(edge2, q);
-//	rec.t = t;
-//
-//	if (t > 0.00001) {
-//		return true;
-//	}
-//
-//	return false;
-//}
-
 bool Triangle::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const {
 
 	auto N = cross(mVert1 - mVert0, mVert2 - mVert0);
