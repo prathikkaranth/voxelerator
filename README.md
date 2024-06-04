@@ -14,4 +14,4 @@ Required:
 To build voxelerator, follow [openFrameworks setup guide](https://openframeworks.cc/download/) and setup openFrameworks. Once setup, run the project generator in the openFrameworks build folder and update project to Voxelerator project.
 
 ## How it works
-If you want to understand the logic behind voxeleration, check out my [blog](https://lite.prathik-karanth.com/posts/voxelerator/).
+If you want to understand the logic, check out my [blog](https://lite.prathik-karanth.com/posts/voxelerator/).
